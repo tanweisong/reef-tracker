@@ -1,64 +1,89 @@
 <template>
-  <div id="app" class="position-absolute">
-    <div class="d-flex flex-column align-items-stretch h-100">
-      <b-navbar toggleable="lg" type="dark" variant="info">
-        <b-navbar-brand href="#">Reef Tracking & Calculation</b-navbar-brand>
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav>
-            <b-nav-item to="./" @click="toggleActive(1)" :active="(activeLink === 1)">Home</b-nav-item>
-            <b-nav-item
-              to="./dosing-calculation"
-              @click="toggleActive(2)"
-              :active="(activeLink === 2)"
-            >Dosing Calculations</b-nav-item>
-            <b-nav-item
-              to="./data-management"
-              @click="toggleActive(3)"
-              :active="(activeLink === 3)"
-            >Data Management</b-nav-item>
-          </b-navbar-nav>
-        </b-collapse>
-      </b-navbar>
+  <v-app>
+    <div id="container" class="d-flex flex-column flex-grow-1">
+      <v-toolbar short class="flex-grow-0">
+        <v-toolbar-title>Reef Tracking & Calculation</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-toolbar-items>
+          <v-btn
+            icon
+            v-show="$vuetify.breakpoint.mdAndUp"
+            @click="handleLinkClick('/')"
+            ><v-icon>mdi-home</v-icon>
+          </v-btn>
+          <v-btn
+            text
+            v-show="$vuetify.breakpoint.mdAndUp"
+            @click="handleLinkClick('/dosing-calculation')"
+            ><v-icon>mdi-calculator</v-icon>
+          </v-btn>
+          <v-btn
+            text
+            v-show="$vuetify.breakpoint.mdAndUp"
+            @click="handleLinkClick('/data-management')"
+            ><v-icon>mdi-settings</v-icon>
+          </v-btn>
+          <v-menu offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on" v-show="$vuetify.breakpoint.smAndDown">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item @click="handleLinkClick('/')">
+                <v-list-item-title>Home</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="handleLinkClick('/dosing-calculation')">
+                <v-list-item-title>Dosing Calculation</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="handleLinkClick('/data-management')">
+                <v-list-item-title>Data Management</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-toolbar-items>
+      </v-toolbar>
+
       <router-view class="flex-grow-1" />
+
+      <!-- <v-bottom-navigation value="1" grow color="teal">
+        <v-btn>
+          <span>Recents</span>
+          <v-icon>mdi-history</v-icon>
+        </v-btn>
+
+        <v-btn>
+          <span>Favorites</span>
+          <v-icon>mdi-heart</v-icon>
+        </v-btn>
+
+        <v-btn>
+          <span>Nearby</span>
+          <v-icon>mdi-map-marker</v-icon>
+        </v-btn>
+      </v-bottom-navigation> -->
     </div>
-  </div>
+  </v-app>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      activeLink: 0
-    };
-  },
-  mounted() {
-    const self = this;
-
-    self.activeLink = 1;
-  },
   methods: {
-    toggleActive(index) {
+    handleLinkClick(path) {
       const self = this;
 
-      self.activeLink = index;
+      self.$router.push({
+        path
+      });
     }
   }
 };
 </script>
 
 <style lang="scss">
-#app {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  hr {
-    border: 0;
-    border-top: 1px solid #ced4da;
-  }
-  input[type="number"] {
-    text-align: right;
-  }
+.v-item-group.v-bottom-navigation .v-btn {
+  height: inherit !important;
 }
 </style>

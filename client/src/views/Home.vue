@@ -1,183 +1,183 @@
 <template>
-  <div class="home d-flex flex-column align-items-stretch">
-    <div class="d-flex flex-row align-items-start home-form flex-wrap">
-      <b-form novalidate>
-        <b-form-group label="Date" for="tracking-date" label-size="sm">
-          <b-form-input type="date" size="sm" v-model="currentDate" :max="todayDate"></b-form-input>
-        </b-form-group>
-      </b-form>
-      <b-form novalidate>
-        <b-form-group label="Calcium Consumption (PPM)" for="calcium-consumption" label-size="sm">
-          <b-form-input
-            id="calcium-consumption"
+  <div class="home d-flex flex-column">
+    <v-form>
+      <v-row class="flex-grow-0">
+        <v-col cols="12" md="2" sm="3">
+          <v-text-field
+            type="date"
+            label="Date"
+            v-model="currentDate"
+            dense
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="2" sm="3">
+          <v-text-field
             type="number"
-            number
-            size="sm"
+            label="Calcium Consumption (PPM)"
             v-model="calciumConsumption"
-            :state="rules.calciumConsumption.state"
-            aria-describedby="calcium-consumption-invalid"
-            debounce="200"
-            @update="consumptionChange('calciumConsumption')"
-          ></b-form-input>
-          <b-form-invalid-feedback id="calcium-consumption-invalid">
-            {{
-            rules.calciumConsumption.message
-            }}
-          </b-form-invalid-feedback>
-        </b-form-group>
-      </b-form>
-      <b-form novalidate>
-        <b-form-group
-          label="Alkalinity Consumption (dKH)"
-          for="alkalinity-consumption"
-          label-size="sm"
-        >
-          <b-form-input
-            id="alkalinity-consumption"
+            dense
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="2" sm="3">
+          <v-text-field
             type="number"
-            number
-            size="sm"
+            label="Alkalinity Consumption (PPM)"
             v-model="alkalinityConsumption"
-            :state="rules.alkalinityConsumption.state"
-            aria-describedby="alkalinity-consumption-invalid"
-            debounce="200"
-            @update="consumptionChange('alkalinityConsumption')"
-          ></b-form-input>
-          <b-form-invalid-feedback id="alkalinity-consumption-invalid">
-            {{
-            rules.alkalinityConsumption.message
-            }}
-          </b-form-invalid-feedback>
-        </b-form-group>
-      </b-form>
-      <b-form novalidate>
-        <b-form-group
-          label="Magnesium Consumption (PPM)"
-          for="magnesium-consumption"
-          label-size="sm"
-        >
-          <b-form-input
-            id="magnesium-consumption"
+            dense
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="2" sm="3">
+          <v-text-field
             type="number"
-            number
-            size="sm"
+            label="Magnesium Consumption (PPM)"
             v-model="magnesiumConsumption"
-            :state="rules.magnesiumConsumption.state"
-            aria-describedby="magnesium-consumption-invalid"
-            debounce="200"
-            @update="consumptionChange('magnesiumConsumption')"
-          ></b-form-input>
-          <b-form-invalid-feedback id="magnesium-consumption-invalid">
-            {{
-            rules.magnesiumConsumption.message
-            }}
-          </b-form-invalid-feedback>
-        </b-form-group>
-      </b-form>
-    </div>
-    <div>
-      <b-button variant="outline-primary" size="sm" @click="updateConsumption">Update</b-button>
-    </div>
-    <div class="flex-grow-1">
-      <b-nav tabs small class="mt-3">
-        <b-nav-item @click="toggleActive(1)" :active="(activeLink === 1)">Daily Consumptions</b-nav-item>
-        <b-nav-item @click="toggleActive(2)" :active="(activeLink === 2)">Monthly Consumptions</b-nav-item>
-      </b-nav>
-      <div v-if="(activeLink === 1)">
-        <div class="d-flex flex-row align-items-center home-form flex-wrap mt-2">
-          <b-form>
-            <b-form-group label="Month" for="chart-month" label-size="sm">
-              <b-form-select
-                id="chart-month"
-                size="sm"
-                :options="chartMonth"
+            dense
+          ></v-text-field>
+        </v-col>
+      </v-row>
+    </v-form>
+    <v-row class="flex-grow-0">
+      <v-col cols="12" md="2">
+        <v-btn outlined small @click="updateConsumption">Update</v-btn>
+      </v-col>
+    </v-row>
+
+    <v-card class="d-flex flex-column flex-grow-1">
+      <v-tabs class="flex-grow-0" background-color="teal" dark>
+        <v-tab @change="handleTabClick(1)">
+          Daily Consumptions
+        </v-tab>
+        <v-tab @change="handleTabClick(2)">
+          Monthly Consumptions
+        </v-tab>
+      </v-tabs>
+      <div v-if="activeLink === 1" class="pa-4 flex-grow-1">
+        <v-form>
+          <v-row class="flex-grow-0">
+            <v-col cols="12" sm="3" md="2">
+              <v-select
+                label="Month"
+                :items="chartMonth"
                 v-model="chart.selectedMonth"
+                dense
                 @change="chartRangeChange"
-              ></b-form-select>
-            </b-form-group>
-          </b-form>
-          <b-form>
-            <b-form-group label="Year" for="chart-year" label-size="sm">
-              <b-form-select
-                id="chart-year"
-                size="sm"
+              ></v-select>
+            </v-col>
+            <v-col cols="12" sm="3" md="2">
+              <v-select
+                label="Year"
+                :items="chartYear"
                 v-model="chart.selectedYear"
-                :options="chartYear"
+                dense
                 @change="chartRangeChange"
-              ></b-form-select>
-            </b-form-group>
-          </b-form>
-        </div>
-        <div class="d-flex flex-row flex-wrap flex-grow-1 w-100">
-          <div class="position-relative chart-container">
-            <bar-chart :chart-data="calciumChart" :options="chartOptions"></bar-chart>
-          </div>
-          <div class="position-relative chart-container">
-            <bar-chart :chart-data="alkalinityChart" :options="chartOptions"></bar-chart>
-          </div>
-          <div class="position-relative chart-container">
-            <bar-chart :chart-data="magnesiumChart" :options="chartOptions"></bar-chart>
-          </div>
-        </div>
+              ></v-select>
+            </v-col>
+          </v-row>
+        </v-form>
+        <v-row>
+          <v-col cols="12" md="6" xl="4">
+            <div class="position-relative chart-container">
+              <bar-chart
+                :chart-data="calciumChart"
+                :options="chartOptions"
+              ></bar-chart>
+            </div>
+          </v-col>
+          <v-col cols="12" md="6" xl="4">
+            <div class="position-relative chart-container">
+              <bar-chart
+                :chart-data="alkalinityChart"
+                :options="chartOptions"
+              ></bar-chart>
+            </div>
+          </v-col>
+          <v-col cols="12" md="6" xl="4">
+            <div class="position-relative chart-container">
+              <bar-chart
+                :chart-data="magnesiumChart"
+                :options="chartOptions"
+              ></bar-chart>
+            </div>
+          </v-col>
+        </v-row>
       </div>
-      <div v-if="(activeLink === 2)">
-        <div class="d-flex flex-row align-items-center home-form flex-wrap mt-2">
-          <b-form>
-            <b-form-group label="Year" for="chart-year" label-size="sm">
-              <b-form-select
-                id="chart-year"
-                size="sm"
+      <div v-else class="pa-4 flex-grow-1">
+        <v-form>
+          <v-row class="flex-grow-0">
+            <v-col cols="12" sm="3" md="2">
+              <v-select
+                label="Year"
+                :items="chartYear"
                 v-model="chart.selectedYear"
-                :options="chartYear"
+                dense
                 @change="chartRangeChange"
-              ></b-form-select>
-            </b-form-group>
-          </b-form>
-        </div>
-        <div class="d-flex flex-row flex-wrap flex-grow-1 w-100">
-          <div class="position-relative chart-container">
-            <bar-chart :chart-data="calciumChart" :options="chartOptions"></bar-chart>
-          </div>
-          <div class="position-relative chart-container">
-            <bar-chart :chart-data="alkalinityChart" :options="chartOptions"></bar-chart>
-          </div>
-          <div class="position-relative chart-container">
-            <bar-chart :chart-data="magnesiumChart" :options="chartOptions"></bar-chart>
-          </div>
-        </div>
+              ></v-select>
+            </v-col>
+          </v-row>
+        </v-form>
+        <v-row>
+          <v-col cols="12" md="6" xl="4">
+            <div class="position-relative chart-container">
+              <bar-chart
+                :chart-data="calciumChart"
+                :options="chartOptions"
+              ></bar-chart>
+            </div>
+          </v-col>
+          <v-col cols="12" md="6" xl="4">
+            <div class="position-relative chart-container">
+              <bar-chart
+                :chart-data="alkalinityChart"
+                :options="chartOptions"
+              ></bar-chart>
+            </div>
+          </v-col>
+          <v-col cols="12" md="6" xl="4">
+            <div class="position-relative chart-container">
+              <bar-chart
+                :chart-data="magnesiumChart"
+                :options="chartOptions"
+              ></bar-chart>
+            </div>
+          </v-col>
+        </v-row>
       </div>
-    </div>
-    <b-modal
+    </v-card>
+
+    <!-- <b-modal
       ref="zero-value-consumption-alert"
       centered
       title="Consumption(s) with zero value"
       @cancel="cancelUpdate"
       @ok="confirmUpdateConsumption"
     >
-      <p class="my-4">There are consumption(s) with zero value. Proceed with update?</p>
+      <p class="my-4">
+        There are consumption(s) with zero value. Proceed with update?
+      </p>
       <ul>
         <li v-for="(item, index) in zeroAlert" :key="index">{{ item }}</li>
       </ul>
-    </b-modal>
-    <b-modal
+    </b-modal> -->
+    <!-- <b-modal
       ref="tracking-exists-alert"
       centered
       title="Record with same date exists"
       @cancel="cancelUpdate"
     >
-      <p
-        class="my-4"
-      >A record with the same date already exists in the system. Overwrite the record?</p>
-    </b-modal>
+      <p class="my-4">
+        A record with the same date already exists in the system. Overwrite the
+        record?
+      </p>
+    </b-modal> -->
   </div>
 </template>
 
 <script>
-import BarChart from "@/components/BarChart";
-import TrackingsService from "@/services/TrackingsService";
+import BarChart from '@/components/BarChart';
+import TrackingsService from '@/services/TrackingsService';
 
 export default {
-  name: "home",
+  name: 'home',
   components: {
     BarChart
   },
@@ -193,18 +193,18 @@ export default {
       alkalinityData: [],
       magnesiumData: [],
       chartMonth: [
-        { value: 1, text: "January" },
-        { value: 2, text: "Feburary" },
-        { value: 3, text: "March" },
-        { value: 4, text: "April" },
-        { value: 5, text: "May" },
-        { value: 6, text: "June" },
-        { value: 7, text: "July" },
-        { value: 8, text: "August" },
-        { value: 9, text: "September" },
-        { value: 10, text: "October" },
-        { value: 11, text: "November" },
-        { value: 12, text: "December" }
+        { value: 1, text: 'January' },
+        { value: 2, text: 'Feburary' },
+        { value: 3, text: 'March' },
+        { value: 4, text: 'April' },
+        { value: 5, text: 'May' },
+        { value: 6, text: 'June' },
+        { value: 7, text: 'July' },
+        { value: 8, text: 'August' },
+        { value: 9, text: 'September' },
+        { value: 10, text: 'October' },
+        { value: 11, text: 'November' },
+        { value: 12, text: 'December' }
       ],
       calciumConsumption: 0,
       alkalinityConsumption: 0,
@@ -219,7 +219,7 @@ export default {
           rules: [
             {
               validator: this.notNegative,
-              message: "Input cannot be negative value"
+              message: 'Input cannot be negative value'
             }
           ]
         },
@@ -227,7 +227,7 @@ export default {
           rules: [
             {
               validator: this.notNegative,
-              message: "Input cannot be negative value"
+              message: 'Input cannot be negative value'
             }
           ]
         },
@@ -235,7 +235,7 @@ export default {
           rules: [
             {
               validator: this.notNegative,
-              message: "Input cannot be negative value"
+              message: 'Input cannot be negative value'
             }
           ]
         }
@@ -262,7 +262,7 @@ export default {
         return `${self.selectedDate.getFullYear()}-${self.selectedDate.getMonth() +
           1}-${
           self.selectedDate.getDate() < 10
-            ? "0" + self.selectedDate.getDate()
+            ? '0' + self.selectedDate.getDate()
             : self.selectedDate.getDate()
         }`;
       },
@@ -290,9 +290,9 @@ export default {
         labels: self.labels,
         datasets: [
           {
-            label: "Calcium Consumption",
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
-            borderColor: "rgba(255, 99, 132, 1)",
+            label: 'Calcium Consumption',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
             data: self.calciumData
           }
@@ -306,9 +306,9 @@ export default {
         labels: self.labels,
         datasets: [
           {
-            label: "Alkalinity Consumption",
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
-            borderColor: "rgba(54, 162, 235, 1)",
+            label: 'Alkalinity Consumption',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1,
             data: self.alkalinityData
           }
@@ -322,9 +322,9 @@ export default {
         labels: self.labels,
         datasets: [
           {
-            label: "Magnesium Consumption",
-            backgroundColor: "rgba(255, 206, 86, 0.2)",
-            borderColor: "rgba(255, 206, 86, 1)",
+            label: 'Magnesium Consumption',
+            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+            borderColor: 'rgba(255, 206, 86, 1)',
             borderWidth: 1,
             data: self.magnesiumData
           }
@@ -340,9 +340,9 @@ export default {
       const month = todayDate.getMonth() + 1;
       const year = todayDate.getFullYear();
       var endDate = new Date(
-        `${chartYear}-${chartMonth < 10 ? "0" + chartMonth : chartMonth}-${
+        `${chartYear}-${chartMonth < 10 ? '0' + chartMonth : chartMonth}-${
           todayDate.getDate() < 10
-            ? "0" + todayDate.getDate()
+            ? '0' + todayDate.getDate()
             : todayDate.getDate()
         }`
       );
@@ -353,7 +353,7 @@ export default {
         chartMonth = chartMonth + 1;
 
         endDate = new Date(
-          `${chartYear}-${chartMonth < 10 ? "0" + chartMonth : chartMonth}-01`
+          `${chartYear}-${chartMonth < 10 ? '0' + chartMonth : chartMonth}-01`
         );
       }
 
@@ -368,12 +368,12 @@ export default {
       const month = todayDate.getMonth() + 1;
       const year = todayDate.getFullYear();
       var startDate = new Date(
-        `${chartYear}-${chartMonth < 10 ? "0" + chartMonth : chartMonth}-01`
+        `${chartYear}-${chartMonth < 10 ? '0' + chartMonth : chartMonth}-01`
       );
 
       if (month !== chartMonth || year !== chartYear)
         startDate = `${chartYear}-${
-          chartMonth < 10 ? "0" + chartMonth : chartMonth
+          chartMonth < 10 ? '0' + chartMonth : chartMonth
         }-01`;
 
       return new Date(startDate);
@@ -385,8 +385,8 @@ export default {
       const month = todayDate.getMonth() + 1;
       const date = todayDate.getDate();
 
-      return `${year}-${month < 10 ? "0" + month : month}-${
-        date < 10 ? "0" + date : date
+      return `${year}-${month < 10 ? '0' + month : month}-${
+        date < 10 ? '0' + date : date
       }`;
     }
   },
@@ -405,9 +405,9 @@ export default {
         labels: [],
         datasets: [
           {
-            label: "GitHub Commits",
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
-            borderColor: "rgba(255, 99, 132, 1)",
+            label: 'GitHub Commits',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
             data: []
           }
@@ -434,7 +434,7 @@ export default {
 
         self.getTrackings();
       } else {
-        this.$refs["tracking-exists-alert"].show();
+        this.$refs['tracking-exists-alert'].show();
       }
     },
     consumptionChange(inProperty) {
@@ -447,7 +447,7 @@ export default {
       const startDate = self.startDate;
       var endDate = self.endDate;
 
-      self.$store.dispatch("setShowLoader", true);
+      self.$store.dispatch('setShowLoader', true);
 
       var trackings = await TrackingsService.getTrackings({
         startDate: new Date(startDate),
@@ -467,7 +467,7 @@ export default {
 
       for (var index = 0; index < trackings.length; index++) {
         var tracking = trackings[index];
-        var date = _.get(tracking, "date");
+        var date = _.get(tracking, 'date');
         var label = new Date(date).getDate();
 
         mapping[label] = tracking;
@@ -492,9 +492,9 @@ export default {
       self.alkalinityData = alkalinity;
       self.magnesiumData = magnesium;
 
-      self.$store.dispatch("setShowLoader", false);
+      self.$store.dispatch('setShowLoader', false);
     },
-    toggleActive(index) {
+    handleTabClick(index) {
       const self = this;
 
       self.activeLink = index;
@@ -516,15 +516,15 @@ export default {
       const magnesiumConsumption = self.magnesiumConsumption;
       let zeroAlert = [];
 
-      if (calciumConsumption === 0) zeroAlert.push("Calcium");
+      if (calciumConsumption === 0) zeroAlert.push('Calcium');
 
-      if (alkalinityConsumption === 0) zeroAlert.push("Alkalinity");
+      if (alkalinityConsumption === 0) zeroAlert.push('Alkalinity');
 
-      if (magnesiumConsumption === 0) zeroAlert.push("Magnesium");
+      if (magnesiumConsumption === 0) zeroAlert.push('Magnesium');
 
       if (zeroAlert.length > 0) {
         self.zeroAlert = zeroAlert;
-        this.$refs["zero-value-consumption-alert"].show();
+        this.$refs['zero-value-consumption-alert'].show();
       } else {
         var valid = this.validateRules();
 
@@ -539,23 +539,5 @@ export default {
 <style lang="scss" scoped>
 .home {
   padding: 1rem;
-  .home-form {
-    & > form {
-      width: 250px;
-    }
-    & > form:not(:last-child) {
-      margin-right: 1rem;
-    }
-  }
-  & > .chart-container:not(:last-child) {
-    margin-bottom: 2rem;
-  }
-}
-.chart-container {
-  width: calc((100% - 2rem) / 2);
-  display: inline-block;
-}
-.chart-container:nth-child(odd) {
-  margin-right: 1rem;
 }
 </style>
