@@ -3,12 +3,7 @@
     <v-form>
       <v-row class="flex-grow-0">
         <v-col cols="12" md="2" sm="3">
-          <v-text-field
-            type="date"
-            label="Date"
-            v-model="currentDate"
-            dense
-          ></v-text-field>
+          <v-text-field type="date" label="Date" v-model="currentDate" dense></v-text-field>
         </v-col>
         <v-col cols="12" md="2" sm="3">
           <v-text-field
@@ -44,12 +39,8 @@
 
     <v-card class="d-flex flex-column flex-grow-1">
       <v-tabs class="flex-grow-0" background-color="teal" dark>
-        <v-tab @change="handleTabClick(1)">
-          Daily Consumptions
-        </v-tab>
-        <v-tab @change="handleTabClick(2)">
-          Monthly Consumptions
-        </v-tab>
+        <v-tab @change="handleTabClick(1)">Daily Consumptions</v-tab>
+        <v-tab @change="handleTabClick(2)">Monthly Consumptions</v-tab>
       </v-tabs>
       <div v-if="activeLink === 1" class="pa-4 flex-grow-1">
         <v-form>
@@ -77,26 +68,17 @@
         <v-row>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="calciumChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="calciumChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="alkalinityChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="alkalinityChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="magnesiumChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="magnesiumChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
         </v-row>
@@ -118,26 +100,17 @@
         <v-row>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="calciumChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="calciumChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="alkalinityChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="alkalinityChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="magnesiumChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="magnesiumChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
         </v-row>
@@ -157,7 +130,7 @@
       <ul>
         <li v-for="(item, index) in zeroAlert" :key="index">{{ item }}</li>
       </ul>
-    </b-modal> -->
+    </b-modal>-->
     <!-- <b-modal
       ref="tracking-exists-alert"
       centered
@@ -168,11 +141,12 @@
         A record with the same date already exists in the system. Overwrite the
         record?
       </p>
-    </b-modal> -->
+    </b-modal>-->
   </div>
 </template>
 
 <script>
+import _ from '@/functions/index';
 import BarChart from '@/components/BarChart';
 import TrackingsService from '@/services/TrackingsService';
 
@@ -539,5 +513,7 @@ export default {
 <style lang="scss" scoped>
 .home {
   padding: 1rem;
+  height: calc(100vh - 48px);
+  overflow-y: auto;
 }
 </style>

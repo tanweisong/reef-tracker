@@ -1,29 +1,33 @@
 <template>
   <v-app>
     <div id="container" class="d-flex flex-column flex-grow-1">
-      <v-toolbar short class="flex-grow-0">
+      <v-toolbar dense class="flex-grow-0">
         <v-toolbar-title>Reef Tracking & Calculation</v-toolbar-title>
 
         <v-spacer></v-spacer>
 
         <v-toolbar-items>
-          <v-btn
-            icon
-            v-show="$vuetify.breakpoint.mdAndUp"
-            @click="handleLinkClick('/')"
-            ><v-icon>mdi-home</v-icon>
+          <v-btn text v-show="$vuetify.breakpoint.mdAndUp" small @click="handleLinkClick('/')">
+            <v-icon>mdi-home</v-icon>
           </v-btn>
           <v-btn
             text
             v-show="$vuetify.breakpoint.mdAndUp"
+            small
             @click="handleLinkClick('/dosing-calculation')"
-            ><v-icon>mdi-calculator</v-icon>
+          >
+            <v-icon>mdi-calculator</v-icon>
           </v-btn>
           <v-btn
             text
             v-show="$vuetify.breakpoint.mdAndUp"
             @click="handleLinkClick('/data-management')"
-            ><v-icon>mdi-settings</v-icon>
+            small
+          >
+            <v-icon>mdi-settings</v-icon>
+          </v-btn>
+          <v-btn text v-show="$vuetify.breakpoint.mdAndUp" @click="handleLogout" small>
+            <v-icon>mdi-logout</v-icon>
           </v-btn>
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
@@ -41,12 +45,15 @@
               <v-list-item @click="handleLinkClick('/data-management')">
                 <v-list-item-title>Data Management</v-list-item-title>
               </v-list-item>
+              <v-list-item @click="handleLogout">
+                <v-list-item-title>Logout</v-list-item-title>
+              </v-list-item>
             </v-list>
           </v-menu>
         </v-toolbar-items>
       </v-toolbar>
 
-      <router-view class="flex-grow-1" />
+      <router-view />
 
       <!-- <v-bottom-navigation value="1" grow color="teal">
         <v-btn>
@@ -63,7 +70,7 @@
           <span>Nearby</span>
           <v-icon>mdi-map-marker</v-icon>
         </v-btn>
-      </v-bottom-navigation> -->
+      </v-bottom-navigation>-->
     </div>
   </v-app>
 </template>
@@ -74,16 +81,25 @@ export default {
     handleLinkClick(path) {
       const self = this;
 
-      self.$router.push({
-        path
-      });
-    }
+      self.$router
+        .push({
+          path
+        })
+        .catch(err => {});
+    },
+    handleLogout() {}
   }
 };
 </script>
 
 <style lang="scss">
-.v-item-group.v-bottom-navigation .v-btn {
-  height: inherit !important;
+html {
+  overflow-y: hidde;
+  body {
+    font-size: 14px;
+  }
+  .v-item-group.v-bottom-navigation .v-btn {
+    height: inherit !important;
+  }
 }
 </style>
