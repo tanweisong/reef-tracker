@@ -1,36 +1,38 @@
+import _ from '@/functions/index';
+
 export default {
   methods: {
     getState(inProperty) {
       const self = this;
       const rules = self.rules;
 
-      if (!self.hasOwnProperty("rules"))
+      if (!self.hasOwnProperty('rules'))
         console.error("no rules defined in component's data");
 
       if (!_.isEmpty(rules) && !self.isNullOrEmpty(inProperty)) {
         const rule = _.get(rules, inProperty);
         let state = null;
         let message = null;
-        var validations = _.get(rule, "rules");
+        var validations = _.get(rule, 'rules');
         const value = self[inProperty];
 
         if (!_.isEmpty(validations)) {
           _.forEach(validations, function(validation) {
-            const required = _.get(validation, "required");
-            const validator = _.get(validation, "validator");
+            const required = _.get(validation, 'required');
+            const validator = _.get(validation, 'validator');
 
             if (required && self.isNullOrEmpty(value)) {
               state = false;
-              message = _.get(validation, "message");
+              message = _.get(validation, 'message');
 
               return false;
             } else if (
               !self.isNullOrEmpty(validator) &&
-              typeof validator === "function"
+              typeof validator === 'function'
             ) {
               if (!validator(value)) {
                 state = false;
-                message = _.get(validation, "message");
+                message = _.get(validation, 'message');
 
                 return false;
               }
@@ -38,8 +40,8 @@ export default {
           });
         }
 
-        self.$set(rule, "state", state);
-        self.$set(rule, "message", message);
+        self.$set(rule, 'state', state);
+        self.$set(rule, 'message', message);
 
         return state;
       }
@@ -49,7 +51,7 @@ export default {
       const rules = self.rules;
       var valid = true;
 
-      if (!self.hasOwnProperty("rules"))
+      if (!self.hasOwnProperty('rules'))
         console.error("no rules defined in component's data");
 
       if (!_.isEmpty(rules)) {

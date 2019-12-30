@@ -14,7 +14,7 @@ export default {
       let pathArray = [];
 
       if (!Array.isArray(path)) {
-        pathArray = path.split('.');
+        pathArray = String(path).split('.');
       }
 
       for (let index = 0; index < pathArray.length; index++) {
@@ -31,6 +31,30 @@ export default {
         }
       }
     }
+
+    return result;
+  },
+  has(obj, path) {
+    let result = true;
+
+    if (!this.isNull(obj) && !this.isNullOrEmpty(path)) {
+      let pathArray = [];
+
+      if (!Array.isArray(path)) {
+        pathArray = String(path).split('.');
+      }
+
+      for (let index = 0; index < pathArray.length; index++) {
+        const key = pathArray[index];
+
+        if (obj.hasOwnProperty(key)) {
+          obj = obj[key];
+        } else {
+          result = false;
+          break;
+        }
+      }
+    } else result = false;
 
     return result;
   },

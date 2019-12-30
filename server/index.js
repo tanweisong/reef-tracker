@@ -7,11 +7,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const login = require("./routes/api/login");
+const logins = require("./routes/api/logins");
 const settings = require("./routes/api/settings");
 const trackings = require("./routes/api/trackings");
 
-app.use("/api/login", login);
+app.use("/api/logins", logins);
 app.use("/api/settings", settings);
 app.use("/api/trackings", trackings);
 

@@ -54,23 +54,6 @@
       </v-toolbar>
 
       <router-view />
-
-      <!-- <v-bottom-navigation value="1" grow color="teal">
-        <v-btn>
-          <span>Recents</span>
-          <v-icon>mdi-history</v-icon>
-        </v-btn>
-
-        <v-btn>
-          <span>Favorites</span>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-
-        <v-btn>
-          <span>Nearby</span>
-          <v-icon>mdi-map-marker</v-icon>
-        </v-btn>
-      </v-bottom-navigation>-->
     </div>
   </v-app>
 </template>
@@ -94,12 +77,15 @@ export default {
 
 <style lang="scss">
 html {
-  overflow-y: hidde;
+  overflow-y: hidden !important;
   body {
     font-size: 14px;
   }
   .v-item-group.v-bottom-navigation .v-btn {
     height: inherit !important;
+  }
+  input[type='number'] {
+    text-align: end;
   }
 }
 </style>

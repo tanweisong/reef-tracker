@@ -1,14 +1,10 @@
 const express = require("express");
-const mongodb = require("mongodb");
+const trackings = require("../../controllers/trackings.controller");
 const _ = require("lodash");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  const trackings = await loadTrackingCollection();
-  const tracking = await trackings.find({}).toArray();
-  res.send(tracking);
-});
+router.get("/", trackings.getTrackings);
 
 router.post("/", async (req, res) => {
   const trackings = await loadTrackingCollection();
@@ -25,16 +21,7 @@ router.post("/", async (req, res) => {
   res.send(tracking);
 });
 
-router.post("/exists", async (req, res) => {
-  const trackings = await loadTrackingCollection();
-  const date = req.body.date;
-
-  const tracking = await trackings.findOne({
-    date: { $eq: date }
-  });
-
-  res.send(tracking);
-});
+router.post("/exists", trackings.getTracking);
 
 router.post("/tracking", async (req, res) => {
   const trackings = await loadTrackingCollection();
@@ -61,32 +48,6 @@ router.post("/tracking", async (req, res) => {
   res.send(tracking);
 });
 
-router.put("/:id", async (req, res) => {
-  const trackings = await loadTrackingCollection();
-
-  await trackings.updateOne(
-    {
-      _id: new mongodb.ObjectId(req.params.id)
-    },
-    {
-      $set: req.body
-    }
-  );
-
-  const tracking = await trackings.find({}).toArray();
-
-  res.send(tracking);
-});
-
-async function loadTrackingCollection() {
-  const client = await mongodb.MongoClient.connect(
-    "mongodb://127.0.0.1:27017",
-    {
-      useNewUrlParser: true
-    }
-  );
-
-  return client.db("reef-tracker").collection("trackings");
-}
+router.put("/:id", trackings.updateTracking);
 
 module.exports = router;

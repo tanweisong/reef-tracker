@@ -1,328 +1,136 @@
 <template>
-  <div>
-    <div class="dosing-calculations d-flex flex-column flex-wrap">
-      <div class="d-flex flex-row flex-wrap dosing-calculations-form-container">
-        <b-form
-          class="dosing-calculations-form"
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-          novalidate
-        >
-          <b-form-group label="Tank Volume (US Gallon)" for="tank-volume-gallon" label-size="sm">
-            <b-form-input
-              id="tank-volume-gallon"
-              ref="tank-volume-gallon"
+  <div class="dosing-calculations d-flex flex-column flex-grow-1">
+    <v-card class="flex-grow-1 pa-4">
+      <v-form class="flex-grow-1">
+        <v-row>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              size="sm"
-              @update="updateVolume(true)"
+              label="Tank Volume (US Gallon)"
+              min="0"
+              dense
               v-model="gallon"
-              debounce="200"
-              :state="rules.gallon.state"
-              aria-describedby="volume-gallon-invalid"
-            ></b-form-input>
-            <b-form-invalid-feedback id="volume-gallon-invalid">
-              {{
-              rules.gallon.message
-              }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-form>
-        <b-form
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-          novalidate
-        >
-          <b-form-group label="Tank Volume (Litre)" for="tank-volume-litre" label-size="sm">
-            <b-form-input
-              id="tank-volume-litre"
-              ref="tank-volume-litre"
+              @input="handleVolumeChange(true)"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              size="sm"
-              @update="updateVolume(false)"
+              label="Tank Volume (Litre)"
+              min="0"
+              dense
               v-model="litre"
-              :state="rules.litre.state"
-              debounce="200"
-              aria-describedby="volume-litre-invalid"
-            ></b-form-input>
-            <b-form-invalid-feedback id="volume-litre-invalid">
-              {{
-              rules.litre.message
-              }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-form>
-      </div>
-      <p class="text-justify">Dosage for Calcium</p>
-      <div class="d-flex flex-row flex-wrap dosing-calculations-form-container">
-        <b-form
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-          novalidate
-        >
-          <b-form-group label="Current PPM" for="current-calcium" label-size="sm">
-            <b-form-input
-              id="current-calcium"
+              @input="handleVolumeChange(false)"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              size="sm"
+              label="Current PPM (Calcium)"
+              dense
               v-model="currentCalcium"
-              :state="rules.currentCalcium.state"
-              aria-describedby="calcium-current-invalid"
-              @update="getState('currentCalcium')"
-            ></b-form-input>
-            <b-form-invalid-feedback id="calcium-current-invalid">
-              {{
-              rules.currentCalcium.message
-              }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-form>
-        <b-form
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-          novalidate
-        >
-          <b-form-group label="Expected PPM" for="expected-calcium" label-size="sm">
-            <b-form-input
-              id="expected-calcium"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              size="sm"
+              label="Expected PPM (Calcium)"
+              dense
               v-model="expectedCalcium"
-              :state="rules.expectedCalcium.state"
-              aria-describedby="calcium-expected-invalid"
-              @update="getState('expectedCalcium')"
-            ></b-form-input>
-            <b-form-invalid-feedback id="calcium-expected-invalid">
-              {{
-              rules.expectedCalcium.message
-              }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-form>
-
-        <b-form
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-          novalidate
-        >
-          <b-form-group label="Brand" for="calcium" label-size="sm">
-            <b-form-select
-              id="calcium"
-              :options="settings.calcium"
-              value-field="brand"
-              text-field="brand"
-              size="sm"
-            ></b-form-select>
-          </b-form-group>
-        </b-form>
-        <b-form>
-          <b-form-group label="Amount Needed" for="needed-calcium" label-size="sm">
-            <b-form-input
-              id="needed-calcium"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="2" sm="3">
+            <!-- <v-select label="Brand (Calcium)" :items="settings.calcium"></v-select> -->
+          </v-col>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              size="sm"
+              label="Required Calcium"
+              disabled
+              dense
               v-model="neededCalcium"
-              disabled
-            ></b-form-input>
-          </b-form-group>
-        </b-form>
-      </div>
-      <p class="text-justify">Dosage for Alkalinity</p>
-      <div class="d-flex flex-row flex-wrap dosing-calculations-form-container">
-        <b-form
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-          novalidate
-        >
-          <b-form-group label="Current dKH" for="current-alkalinity" label-size="sm">
-            <b-form-input
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              id="current-alkalinity"
-              size="sm"
-              :state="rules.currentAlkalinity.state"
+              label="Current PPM (Alkalinity)"
+              dense
+              step=".1"
               v-model="currentAlkalinity"
-              aria-describedby="alkalinity-current-invalid"
-              @update="getState('currentAlkalinity')"
-            ></b-form-input>
-            <b-form-invalid-feedback id="alkalinity-current-invalid">
-              {{
-              rules.currentAlkalinity.message
-              }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-form>
-        <b-form
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-          novalidate
-        >
-          <b-form-group label="Expected dKH" for="expected-alkalinity" label-size="sm">
-            <b-form-input
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              id="expected-alkalinity"
-              size="sm"
+              label="Expected PPM (Alkalinity)"
               v-model="expectedAlkalinity"
-              :state="rules.expectedAlkalinity.state"
-              aria-describedby="alkalinity-expected-invalid"
-              @update="getState('expectedAlkalinity')"
-            ></b-form-input>
-            <b-form-invalid-feedback id="alkalinity-expected-invalid">
-              {{
-              rules.expectedAlkalinity.message
-              }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-form>
-        <b-form
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-        >
-          <b-form-group label="Brand" for="alkalinity" label-size="sm">
-            <b-form-select
-              id="alkalinity"
-              :options="settings.alkalinity"
-              value-field="brand"
-              text-field="brand"
-              size="sm"
-            ></b-form-select>
-          </b-form-group>
-        </b-form>
-        <b-form>
-          <b-form-group label="Amount Needed" for="needed-alkalinity" label-size="sm">
-            <b-form-input
-              id="needed-alkalinity"
+              dense
+              step=".1"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="2" sm="3">
+            <!-- <v-select label="Brand (Alkalinity)" :items="settings.alkalinity"></v-select> -->
+          </v-col>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              size="sm"
+              label="Required Alkalinity"
+              disabled
+              dense
               v-model="neededAlkalinity"
-              disabled
-            ></b-form-input>
-          </b-form-group>
-        </b-form>
-      </div>
-      <p class="text-justify">Dosage for Magneisum</p>
-      <div class="d-flex flex-row flex-wrap dosing-calculations-form-container">
-        <b-form
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-        >
-          <b-form-group label="Current PPM" for="current-magnesium" label-size="sm">
-            <b-form-input
-              id="current-magnesium"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              size="sm"
+              label="Current PPM (Magnesium)"
+              dense
               v-model="currentMagnesium"
-              :state="rules.currentMagnesium.state"
-              aria-describedby="magnesium-current-invalid"
-              @update="getState('currentMagnesium')"
-            ></b-form-input>
-            <b-form-invalid-feedback id="magnesium-current-invalid">
-              {{
-              rules.currentMagnesium.message
-              }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-form>
-        <b-form
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-          novalidate
-        >
-          <b-form-group label="Expected PPM" for="expected-magnesium" label-size="sm">
-            <b-form-input
-              id="expected-magnesium"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              size="sm"
+              label="Expected PPM (Magnesium)"
+              dense
               v-model="expectedMagnesium"
-              :state="rules.expectedMagnesium.state"
-              aria-describedby="magnesium-expected-invalid"
-              @update="getState('expectedMagnesium')"
-            ></b-form-input>
-            <b-form-invalid-feedback id="magnesium-expected-invalid">
-              {{
-              rules.expectedMagnesium.message
-              }}
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-form>
-        <b-form
-          @submit="
-            evt => {
-              evt.preventDefault();
-            }
-          "
-          novalidate
-        >
-          <b-form-group label="Brand" for="magnesium" label-size="sm">
-            <b-form-select
-              id="magnesium"
-              :options="settings.magnesium"
-              value-field="brand"
-              text-field="brand"
-              size="sm"
-            ></b-form-select>
-          </b-form-group>
-        </b-form>
-        <b-form>
-          <b-form-group label="Amount Needed" for="needed-magnesium" label-size="sm">
-            <b-form-input
-              id="needed-magnesium"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="2" sm="3">
+            <!-- <v-select label="Brand (Magnesium)" :items="settings.magnesium"></v-select> -->
+          </v-col>
+          <v-col cols="12" md="2" sm="3">
+            <v-text-field
               type="number"
-              number
-              size="sm"
-              v-model="neededMagnesium"
+              label="Required Magnesium"
               disabled
-            ></b-form-input>
-          </b-form-group>
-        </b-form>
-      </div>
-      <div>
-        <b-button variant="outline-primary" size="sm" @click="calculateDosage">Calculate</b-button>
-      </div>
-    </div>
+              dense
+              v-model="neededMagnesium"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="12" lg="12">
+            <v-btn small outlined @click="calculateDosage">
+              <span>Calculate</span>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-card>
   </div>
 </template>
 
 <script>
-import SettingsService from "@/services/SettingsService";
+import _ from '@/functions/index';
+import SettingsService from '@/services/SettingsService';
 
 export default {
   data() {
@@ -339,115 +147,18 @@ export default {
       neededCalcium: 0,
       neededAlkalinity: 0,
       neededMagnesium: 0,
-      rules: {
-        gallon: {
-          rules: [
-            {
-              required: true,
-              message: "Input is required"
-            },
-            {
-              validator: this.greaterThanZero,
-              message: "Input must be greater than 0"
-            }
-          ]
-        },
-        litre: {
-          rules: [
-            {
-              required: true,
-              message: "Input is required"
-            },
-            {
-              validator: this.greaterThanZero,
-              message: "Input must be greater than 0"
-            }
-          ]
-        },
-        currentCalcium: {
-          rules: [
-            {
-              required: true,
-              message: "Input is required"
-            },
-            {
-              validator: this.greaterThanZero,
-              message: "Input must be greater than 0"
-            }
-          ]
-        },
-        expectedCalcium: {
-          rules: [
-            {
-              required: true,
-              message: "Input is required"
-            },
-            {
-              validator: this.greaterThanZero,
-              message: "Input must be greater than 0"
-            }
-          ]
-        },
-        currentAlkalinity: {
-          rules: [
-            {
-              required: true,
-              message: "Input is required"
-            },
-            {
-              validator: this.greaterThanZero,
-              message: "Input must be greater than 0"
-            }
-          ]
-        },
-        expectedAlkalinity: {
-          rules: [
-            {
-              required: true,
-              message: "Input is required"
-            },
-            {
-              validator: this.greaterThanZero,
-              message: "Input must be greater than 0"
-            }
-          ]
-        },
-        currentMagnesium: {
-          rules: [
-            {
-              required: true,
-              message: "Input is required"
-            },
-            {
-              validator: this.greaterThanZero,
-              message: "Input must be greater than 0"
-            }
-          ]
-        },
-        expectedMagnesium: {
-          rules: [
-            {
-              required: true,
-              message: "Input is required"
-            },
-            {
-              validator: this.greaterThanZero,
-              message: "Input must be greater than 0"
-            }
-          ]
-        }
-      }
+      timer: null
     };
   },
   async mounted() {
     const self = this;
     let settings = await SettingsService.getSettings();
 
-    if (self.isNullOrEmpty(settings)) {
+    if (_.isNullOrEmpty(settings)) {
       settings = null;
     }
 
-    self.$store.dispatch("setSettings", settings);
+    self.$store.dispatch('setSettings', settings);
   },
   computed: {
     settings() {
@@ -459,32 +170,46 @@ export default {
   methods: {
     calculateDosage() {
       const self = this;
-      const calcium = _.get(self, "calcium");
-      const alkalinity = _.get(self, "alkalinity");
-      const magnesium = _.get(self, "magnesium");
+      const calcium = _.get(self, 'calcium');
+      const alkalinity = _.get(self, 'alkalinity');
+      const magnesium = _.get(self, 'magnesium');
 
       self.validateRules();
     },
-    updateVolume(bGallon) {
+    handleVolumeChange(bGallon) {
       const self = this;
       let gallon = self.gallon;
       let litre = self.litre;
       const gallonToLitre = self.gallonToLitre;
 
-      if (bGallon) {
-        if (self.isNullOrEmpty(gallon)) self.litre = "";
-        else if (!isNaN(gallon)) {
-          self.litre = self.to2DecimalPlaces(gallon * gallonToLitre);
-        }
-      } else {
-        if (self.isNullOrEmpty(litre)) self.gallon = "";
-        else if (!isNaN(litre)) {
-          self.gallon = self.to2DecimalPlaces(litre / gallonToLitre);
-        }
+      if (!_.isNull(self.timer)) {
+        clearInterval(self.timer);
+        self.timer = null;
       }
 
-      self.getState("gallon");
-      self.getState("litre");
+      self.timer = setInterval(function() {
+        if (bGallon) {
+          if (_.isNullOrEmpty(gallon) || gallon < 0) {
+            self.litre = 0;
+            self.gallon = 0;
+          } else if (!isNaN(gallon)) {
+            self.litre = self.to2DecimalPlaces(gallon * gallonToLitre);
+          }
+        } else {
+          if (_.isNullOrEmpty(litre) || litre < 0) {
+            self.gallon = 0;
+            self.litre = 0;
+          } else if (!isNaN(litre)) {
+            self.gallon = self.to2DecimalPlaces(litre / gallonToLitre);
+          }
+        }
+
+        self.getState('gallon');
+        self.getState('litre');
+
+        clearInterval(self.timer);
+        self.timer = null;
+      }, 300);
     }
   }
 };
