@@ -12,9 +12,9 @@ const getTracking = async date => {
 
 const getTrackings = async () => {
   const trackings = await loadTrackingCollection();
-  const trackings = await trackings.find({}).toArray();
+  const results = await trackings.find({}).toArray();
 
-  return trackings;
+  return results;
 };
 
 const updateTracking = async (trackingId, tracking) => {

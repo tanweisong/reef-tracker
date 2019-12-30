@@ -136,6 +136,12 @@ export default {
   async mounted() {
     const self = this;
     let settings = await SettingsService.getSettings();
+    const login = self.$store.getters.getLogin;
+
+    if (_.isNull(login))
+      self.$router.push({
+        path: '/login'
+      });
 
     if (_.isNullOrEmpty(settings)) {
       settings = null;

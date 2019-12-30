@@ -59,7 +59,18 @@
 </template>
 
 <script>
+import _ from '@/functions/index';
+
 export default {
+  mounted() {
+    const self = this;
+    const login = self.$store.getters.getLogin;
+
+    if (_.isNull(login))
+      self.$router.push({
+        path: '/login'
+      });
+  },
   methods: {
     handleLinkClick(path) {
       const self = this;
@@ -78,8 +89,9 @@ export default {
 <style lang="scss">
 html {
   overflow-y: hidden !important;
+  font-size: 14px !important;
   body {
-    font-size: 14px;
+    font-size: 14px !important;
   }
   .v-item-group.v-bottom-navigation .v-btn {
     height: inherit !important;

@@ -222,6 +222,12 @@ export default {
     const todayDate = new Date();
     const month = todayDate.getMonth() + 1;
     const year = todayDate.getFullYear();
+    const login = self.$store.getters.getLogin;
+
+    if (_.isNull(login))
+      self.$router.push({
+        path: '/login'
+      });
 
     self.activeLink = 1;
 
