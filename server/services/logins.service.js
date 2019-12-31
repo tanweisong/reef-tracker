@@ -1,4 +1,6 @@
 const mongodb = require("mongodb");
+const dotenv = require("dotenv").config();
+const _ = require("../../functions/index");
 
 const createLogin = async (email, password) => {
   const logins = await loadLoginCollection();
@@ -20,7 +22,7 @@ const createLogin = async (email, password) => {
   );
 };
 
-const getLogin = async email => {
+const getLogin = async (email, bCount = false) => {
   const logins = await loadLoginCollection();
   let login = await logins
     .aggregate([
@@ -48,9 +50,13 @@ const getLogin = async email => {
     ])
     .toArray();
 
-  if (login.length > 0) login = login[0];
+  if (!_.isNullOrEmpty(bCount) && bCount) {
+    return login.length > 0;
+  } else {
+    if (login.length > 0) login = login[0];
 
-  return login;
+    return login;
+  }
 };
 
 const updateLogin = async login => {

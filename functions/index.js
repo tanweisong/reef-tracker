@@ -1,20 +1,27 @@
-export default {
-  cloneDeep(obj) {
+module.exports = {
+  cloneDeep: function(obj) {
     return JSON.parse(JSON.stringify(obj));
   },
-  forOwn(array, fn) {
-    console.error(array);
+  forOwn: function(obj, fn) {
+    if (!this.isNull(obj)) {
+      const keys = Object.keys(obj);
+      for (let index = 0; index < keys.length; index++) {
+        const key = keys[index];
+        const value = obj[key];
+        let result = fn(value, key, obj[key]);
 
-    console.error(fn);
+        if (!this.isNullOrEmpty(result) && !result) break;
+      }
+    }
   },
-  get(obj, path, defaultValue = null) {
+  get: function(obj, path, defaultValue = null) {
     let result = defaultValue;
 
     if (!this.isNull(obj) && !this.isNullOrEmpty(path)) {
       let pathArray = [];
 
       if (!Array.isArray(path)) {
-        pathArray = String(path).split('.');
+        pathArray = String(path).split(".");
       }
 
       for (let index = 0; index < pathArray.length; index++) {
@@ -34,14 +41,14 @@ export default {
 
     return result;
   },
-  has(obj, path) {
+  has: function(obj, path) {
     let result = true;
 
     if (!this.isNull(obj) && !this.isNullOrEmpty(path)) {
       let pathArray = [];
 
       if (!Array.isArray(path)) {
-        pathArray = String(path).split('.');
+        pathArray = String(path).split(".");
       }
 
       for (let index = 0; index < pathArray.length; index++) {
@@ -58,23 +65,23 @@ export default {
 
     return result;
   },
-  indexOf(array, value) {
+  indexOf: function(array, value) {
     if (!this.isNull(array)) {
       return array.indexOf(value);
     } else {
       return -1;
     }
   },
-  isArray(value) {
+  isArray: function(value) {
     return Array.isArray(value);
   },
-  isEmpty(value) {
+  isEmpty: function(value) {
     if (!this.isNull(value)) {
-      if (typeof value.length === 'number' && value.length === 0) {
+      if (typeof value.length === "number" && value.length === 0) {
         return true;
-      } else if (typeof value.size === 'number' && value.size === 0) {
+      } else if (typeof value.size === "number" && value.size === 0) {
         return true;
-      } else if (typeof value === 'object' && Object.keys(value).length === 0) {
+      } else if (typeof value === "object" && Object.keys(value).length === 0) {
         return true;
       } else {
         return false;
@@ -83,10 +90,10 @@ export default {
       return true;
     }
   },
-  isNull(value) {
+  isNull: function(value) {
     return value == null;
   },
-  isNullOrEmpty(value) {
+  isNullOrEmpty: function(value) {
     return this.isNull(value) || this.isEmpty(value);
   }
 };

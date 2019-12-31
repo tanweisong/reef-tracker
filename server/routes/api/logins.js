@@ -1,8 +1,9 @@
 const express = require("express");
 const login = require("../../controllers/logins.controller.js");
-const _ = require("lodash");
 
 const router = express.Router();
+
+router.get("/exists/:email", login.loginExists);
 
 router.get("/:email", login.getLogin);
 

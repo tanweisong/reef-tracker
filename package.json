@@ -5,15 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
-    "client": "cd client && npm run serve",
-    "server": "nodemon server/index.js",
-    "dev": "npm run client & npm run server"
+    "client": "cd client && npm run serve"
   },
   "author": "Beck",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
     "mongodb": "^3.3.4"

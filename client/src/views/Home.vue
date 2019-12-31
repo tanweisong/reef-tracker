@@ -3,7 +3,12 @@
     <v-form>
       <v-row class="flex-grow-0">
         <v-col cols="12" md="2" sm="3">
-          <v-text-field type="date" label="Date" v-model="currentDate" dense></v-text-field>
+          <v-text-field
+            type="date"
+            label="Date"
+            v-model="currentDate"
+            dense
+          ></v-text-field>
         </v-col>
         <v-col cols="12" md="2" sm="3">
           <v-text-field
@@ -33,7 +38,9 @@
     </v-form>
     <v-row class="flex-grow-0">
       <v-col cols="12" md="2">
-        <v-btn outlined small @click="updateConsumption">Update</v-btn>
+        <v-btn color="teal darken-1" @click="updateConsumption" outlined small
+          >Update</v-btn
+        >
       </v-col>
     </v-row>
 
@@ -68,17 +75,26 @@
         <v-row>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart :chart-data="calciumChart" :options="chartOptions"></bar-chart>
+              <bar-chart
+                :chart-data="calciumChart"
+                :options="chartOptions"
+              ></bar-chart>
             </div>
           </v-col>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart :chart-data="alkalinityChart" :options="chartOptions"></bar-chart>
+              <bar-chart
+                :chart-data="alkalinityChart"
+                :options="chartOptions"
+              ></bar-chart>
             </div>
           </v-col>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart :chart-data="magnesiumChart" :options="chartOptions"></bar-chart>
+              <bar-chart
+                :chart-data="magnesiumChart"
+                :options="chartOptions"
+              ></bar-chart>
             </div>
           </v-col>
         </v-row>
@@ -100,17 +116,26 @@
         <v-row>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart :chart-data="calciumChart" :options="chartOptions"></bar-chart>
+              <bar-chart
+                :chart-data="calciumChart"
+                :options="chartOptions"
+              ></bar-chart>
             </div>
           </v-col>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart :chart-data="alkalinityChart" :options="chartOptions"></bar-chart>
+              <bar-chart
+                :chart-data="alkalinityChart"
+                :options="chartOptions"
+              ></bar-chart>
             </div>
           </v-col>
           <v-col cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart :chart-data="magnesiumChart" :options="chartOptions"></bar-chart>
+              <bar-chart
+                :chart-data="magnesiumChart"
+                :options="chartOptions"
+              ></bar-chart>
             </div>
           </v-col>
         </v-row>
@@ -146,7 +171,7 @@
 </template>
 
 <script>
-import _ from '@/functions/index';
+const _ = require('../../../functions/index.js');
 import BarChart from '@/components/BarChart';
 import TrackingsService from '@/services/TrackingsService';
 
@@ -224,10 +249,10 @@ export default {
     const year = todayDate.getFullYear();
     const login = self.$store.getters.getLogin;
 
-    if (_.isNull(login))
-      self.$router.push({
-        path: '/login'
-      });
+    // if (_.isNull(login))
+    //   self.$router.push({
+    //     path: '/login'
+    //   });
 
     self.activeLink = 1;
 

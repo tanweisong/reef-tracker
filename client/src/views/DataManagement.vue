@@ -2,7 +2,9 @@
   <div id="data-management">
     <v-expansion-panels v-model="panel" multiple>
       <v-expansion-panel>
-        <v-expansion-panel-header class="py-0">Calcium</v-expansion-panel-header>
+        <v-expansion-panel-header class="py-0"
+          >Calcium</v-expansion-panel-header
+        >
         <v-expansion-panel-content>
           <v-form dense>
             <v-row v-for="item in calcium" :key="item._id">
@@ -30,7 +32,9 @@
       </v-expansion-panel>
 
       <v-expansion-panel>
-        <v-expansion-panel-header class="py-0">Alkalinity</v-expansion-panel-header>
+        <v-expansion-panel-header class="py-0"
+          >Alkalinity</v-expansion-panel-header
+        >
         <v-expansion-panel-content>
           <v-form dense>
             <v-row v-for="item in alkalinity" :key="item._id">
@@ -59,7 +63,9 @@
       </v-expansion-panel>
 
       <v-expansion-panel>
-        <v-expansion-panel-header class="py-0">Magnesium</v-expansion-panel-header>
+        <v-expansion-panel-header class="py-0"
+          >Magnesium</v-expansion-panel-header
+        >
         <v-expansion-panel-content>
           <v-form dense>
             <v-row v-for="item in magnesium" :key="item._id">
@@ -90,7 +96,7 @@
 </template>
 
 <script>
-import _ from '@/functions/index';
+const _ = require('../../../functions/index.js');
 import Loader from '@/components/Loader';
 import SettingsService from '@/services/SettingsService';
 
@@ -138,10 +144,10 @@ export default {
     let settings = await SettingsService.getSettings();
     const login = self.$store.getters.getLogin;
 
-    if (_.isNull(login))
-      self.$router.push({
-        path: '/login'
-      });
+    // if (_.isNull(login))
+    //   self.$router.push({
+    //     path: '/login'
+    //   });
 
     if (_.isNullOrEmpty(settings)) {
       settings = null;

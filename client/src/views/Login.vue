@@ -3,12 +3,42 @@
     <div class="d-flex flex-row align-center flex-grow-1">
       <v-card class="px-4 py-8" width="350px">
         <v-form>
-          <v-text-field label="Username" dense></v-text-field>
-          <v-text-field type="password" label="Password" dense></v-text-field>
+          <v-row>
+            <v-col cols="12"
+              ><v-text-field
+                label="Username"
+                autocomplete="new-password"
+                dense
+              ></v-text-field
+            ></v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12"
+              ><v-text-field
+                type="password"
+                label="Password"
+                autocomplete="new-password"
+                dense
+              ></v-text-field
+            ></v-col>
+          </v-row>
           <v-row>
             <v-col cols="12">
-              <v-btn class="float-right" small outlined @click="handleLogin">Login</v-btn>
-              <v-btn class="float-right mr-2" small outlined @click="handleRegister">Register</v-btn>
+              <v-btn
+                class="float-right"
+                color="teal darken-1"
+                @click="handleLogin"
+                small
+                outlined
+                >Login</v-btn
+              >
+              <v-btn
+                class="float-right mr-2"
+                @click="handleRegister"
+                small
+                outlined
+                >Register</v-btn
+              >
             </v-col>
           </v-row>
         </v-form>

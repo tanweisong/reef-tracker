@@ -7,7 +7,12 @@
         <v-spacer></v-spacer>
 
         <v-toolbar-items>
-          <v-btn text v-show="$vuetify.breakpoint.mdAndUp" small @click="handleLinkClick('/')">
+          <v-btn
+            text
+            v-show="$vuetify.breakpoint.mdAndUp"
+            small
+            @click="handleLinkClick('/')"
+          >
             <v-icon>mdi-home</v-icon>
           </v-btn>
           <v-btn
@@ -26,7 +31,12 @@
           >
             <v-icon>mdi-settings</v-icon>
           </v-btn>
-          <v-btn text v-show="$vuetify.breakpoint.mdAndUp" @click="handleLogout" small>
+          <v-btn
+            text
+            v-show="$vuetify.breakpoint.mdAndUp"
+            @click="handleLogout"
+            small
+          >
             <v-icon>mdi-logout</v-icon>
           </v-btn>
           <v-menu offset-y>
@@ -59,18 +69,18 @@
 </template>
 
 <script>
-import _ from '@/functions/index';
+const _ = require('../../functions/index.js');
 
 export default {
-  mounted() {
-    const self = this;
-    const login = self.$store.getters.getLogin;
+  // mounted() {
+  //   const self = this;
+  //   const login = self.$store.getters.getLogin;
 
-    if (_.isNull(login))
-      self.$router.push({
-        path: '/login'
-      });
-  },
+  //   if (_.isNull(login))
+  //     self.$router.push({
+  //       path: '/login'
+  //     });
+  // },
   methods: {
     handleLinkClick(path) {
       const self = this;
@@ -89,15 +99,14 @@ export default {
 <style lang="scss">
 html {
   overflow-y: hidden !important;
-  font-size: 14px !important;
-  body {
-    font-size: 14px !important;
-  }
   .v-item-group.v-bottom-navigation .v-btn {
     height: inherit !important;
   }
   input[type='number'] {
     text-align: end;
+  }
+  .v-input {
+    font-size: 1rem;
   }
 }
 </style>

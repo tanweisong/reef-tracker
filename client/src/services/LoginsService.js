@@ -3,10 +3,10 @@ import axios from 'axios';
 const url = 'http://localhost:5000/api/logins';
 
 class LoginsService {
-  static getSettings() {
+  static createLogin(login) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await axios.get(url);
+        const res = await axios.post(url, login);
         const data = res.data;
 
         resolve(data);
@@ -16,23 +16,10 @@ class LoginsService {
     });
   }
 
-  static createSettings(inSettings) {
+  static loginExists(email) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await axios.post(url, inSettings);
-        const data = res.data;
-
-        resolve(data);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-
-  static updateSettings(inSettingId, inSettings) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const res = await axios.put(`${url}/${inSettingId}`, inSettings);
+        const res = await axios.get(`${url}/exists/${email}`);
         const data = res.data;
 
         resolve(data);

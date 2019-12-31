@@ -1,4 +1,4 @@
-import _ from '@/functions/index';
+const _ = require('../../../functions/index.js');
 
 export default {
   methods: {

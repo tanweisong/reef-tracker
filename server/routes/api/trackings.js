@@ -1,4 +1,5 @@
 const express = require("express");
+const mongodb = require("mongodb");
 const trackings = require("../../controllers/trackings.controller");
 const _ = require("lodash");
 
@@ -49,5 +50,19 @@ router.post("/tracking", async (req, res) => {
 });
 
 router.put("/:id", trackings.updateTracking);
+
+async function loadTrackingCollection() {
+  const dbconnection = process.env.dbconnection;
+
+  const client = await mongodb.MongoClient.connect(
+    // "mongodb://127.0.0.1:27017",
+    dbconnection,
+    {
+      useNewUrlParser: true
+    }
+  );
+
+  return client.db("reef-tracker").collection("trackings");
+}
 
 module.exports = router;

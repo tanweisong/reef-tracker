@@ -3,7 +3,7 @@
     <v-card class="flex-grow-1 pa-4">
       <v-form class="flex-grow-1">
         <v-row>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Tank Volume (US Gallon)"
@@ -13,7 +13,7 @@
               @input="handleVolumeChange(true)"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Tank Volume (Litre)"
@@ -25,7 +25,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Current PPM (Calcium)"
@@ -33,7 +33,7 @@
               v-model="currentCalcium"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Expected PPM (Calcium)"
@@ -41,10 +41,14 @@
               v-model="expectedCalcium"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="2" sm="3">
-            <!-- <v-select label="Brand (Calcium)" :items="settings.calcium"></v-select> -->
+          <v-col cols="12" md="2" sm="4">
+            <v-select
+              label="Brand (Calcium)"
+              :items="settings.calcium"
+              dense
+            ></v-select>
           </v-col>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Required Calcium"
@@ -55,7 +59,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Current PPM (Alkalinity)"
@@ -64,7 +68,7 @@
               v-model="currentAlkalinity"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Expected PPM (Alkalinity)"
@@ -73,10 +77,14 @@
               step=".1"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="2" sm="3">
-            <!-- <v-select label="Brand (Alkalinity)" :items="settings.alkalinity"></v-select> -->
+          <v-col cols="12" md="2" sm="4">
+            <v-select
+              label="Brand (Alkalinity)"
+              :items="settings.alkalinity"
+              dense
+            ></v-select>
           </v-col>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Required Alkalinity"
@@ -87,7 +95,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Current PPM (Magnesium)"
@@ -95,7 +103,7 @@
               v-model="currentMagnesium"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Expected PPM (Magnesium)"
@@ -103,10 +111,14 @@
               v-model="expectedMagnesium"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="2" sm="3">
-            <!-- <v-select label="Brand (Magnesium)" :items="settings.magnesium"></v-select> -->
+          <v-col cols="12" md="2" sm="4">
+            <v-select
+              label="Brand (Magnesium)"
+              :items="settings.magnesium"
+              dense
+            ></v-select>
           </v-col>
-          <v-col cols="12" md="2" sm="3">
+          <v-col cols="12" md="2" sm="4">
             <v-text-field
               type="number"
               label="Required Magnesium"
@@ -118,7 +130,12 @@
         </v-row>
         <v-row>
           <v-col cols="12" md="12" lg="12">
-            <v-btn small outlined @click="calculateDosage">
+            <v-btn
+              color="teal darken-1"
+              @click="calculateDosage"
+              small
+              outlined
+            >
               <span>Calculate</span>
             </v-btn>
           </v-col>
@@ -129,7 +146,7 @@
 </template>
 
 <script>
-import _ from '@/functions/index';
+const _ = require('../../../functions/index.js');
 import SettingsService from '@/services/SettingsService';
 
 export default {
@@ -155,10 +172,10 @@ export default {
     let settings = await SettingsService.getSettings();
     const login = self.$store.getters.getLogin;
 
-    if (_.isNull(login))
-      self.$router.push({
-        path: '/login'
-      });
+    // if (_.isNull(login))
+    //   self.$router.push({
+    //     path: '/login'
+    //   });
 
     if (_.isNullOrEmpty(settings)) {
       settings = null;
