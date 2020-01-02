@@ -1,26 +1,14 @@
 <template>
-  <div class="loader">
-    <b-modal
-      ref="ref-loader"
-      hide-footer
-      centered
-      no-close-on-backdrop
-      no-close-on-esc
-      hide-header
-      size="sm"
-      v-model="showLoader"
-    >
-      <div class="text-center">
-        <p>Loading. Please wait...</p>
-        <b-spinner variant="primary" label="Spinning"></b-spinner>
-      </div>
-    </b-modal>
+  <div>
+    <v-overlay :value="showLoader">
+      <v-progress-circular indeterminate size="70" width="7"></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
 <script>
 export default {
-  name: "loader",
+  name: 'loader',
   computed: {
     showLoader: {
       get() {

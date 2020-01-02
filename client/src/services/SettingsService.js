@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-const url = "http://localhost:5000/api/settings";
+const url = 'http://localhost:5000/api/settings';
 
 class SettingsService {
   static getSettings() {
@@ -16,10 +16,10 @@ class SettingsService {
     });
   }
 
-  static createSettings(inSettings) {
+  static createSettings(settings) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await axios.post(url, inSettings);
+        const res = await axios.post(url, settings);
         const data = res.data;
 
         resolve(data);
@@ -29,10 +29,10 @@ class SettingsService {
     });
   }
 
-  static updateSettings(inSettingId, inSettings) {
+  static updateSettings(settingsId, settings) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await axios.put(`${url}/${inSettingId}`, inSettings);
+        const res = await axios.put(`${url}/${settingsId}`, settings);
         const data = res.data;
 
         resolve(data);

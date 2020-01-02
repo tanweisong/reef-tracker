@@ -4,7 +4,7 @@
       <v-card class="px-4 py-8" width="350px">
         <v-form ref="form">
           <v-row>
-            <v-col cols="12">
+            <v-col class="pb-0" cols="12">
               <v-text-field
                 label="Email"
                 autocomplete="new-password"
@@ -13,11 +13,11 @@
                 :rules="emailRules"
                 @input="handleEmailInput"
                 dense
-              ></v-text-field
-            ></v-col>
+              ></v-text-field>
+            </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12">
+            <v-col class="pb-0" cols="12">
               <v-text-field
                 type="password"
                 label="Password"
@@ -52,15 +52,8 @@
                 @click="handleRegister"
                 small
                 outlined
-                >Register</v-btn
-              >
-              <v-btn
-                class="float-right mr-2"
-                @click="handleCancel"
-                small
-                outlined
-                >Cancel</v-btn
-              >
+              >Register</v-btn>
+              <v-btn class="float-right mr-2" @click="handleCancel" small outlined>Cancel</v-btn>
             </v-col>
           </v-row>
         </v-form>
@@ -117,7 +110,7 @@ export default {
       const self = this;
       const email = self.email;
 
-      if (!_.isNull(self.timer)) {
+      if (!_.isNil(self.timer)) {
         self.clearTimer();
       }
 

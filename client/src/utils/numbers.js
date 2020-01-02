@@ -1,9 +1,9 @@
 export default {
   methods: {
-    to2DecimalPlaces(value, event) {
-      if (!isNaN(value)) {
-        return parseFloat(parseFloat(value).toFixed(2));
-      } else return null;
+    roundToDecimalPlaces(value, numOfDecimals) {
+      if (!isNaN(value) && !isNaN(numOfDecimals))
+        return parseFloat(parseFloat(value).toFixed(Number(numOfDecimals)));
+      else return null;
     },
     greaterThanZero(value) {
       if (this.isNullOrEmpty(value)) {

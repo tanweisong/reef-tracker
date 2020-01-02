@@ -3,7 +3,7 @@ module.exports = {
     return JSON.parse(JSON.stringify(obj));
   },
   forOwn: function(obj, fn) {
-    if (!this.isNull(obj)) {
+    if (!this.isNil(obj)) {
       const keys = Object.keys(obj);
       for (let index = 0; index < keys.length; index++) {
         const key = keys[index];
@@ -17,7 +17,7 @@ module.exports = {
   get: function(obj, path, defaultValue = null) {
     let result = defaultValue;
 
-    if (!this.isNull(obj) && !this.isNullOrEmpty(path)) {
+    if (!this.isNil(obj) && !this.isNullOrEmpty(path)) {
       let pathArray = [];
 
       if (!Array.isArray(path)) {
@@ -42,9 +42,9 @@ module.exports = {
     return result;
   },
   has: function(obj, path) {
-    let result = true;
+    let result = false;
 
-    if (!this.isNull(obj) && !this.isNullOrEmpty(path)) {
+    if (!this.isNil(obj) && !this.isNullOrEmpty(path)) {
       let pathArray = [];
 
       if (!Array.isArray(path)) {
@@ -55,7 +55,11 @@ module.exports = {
         const key = pathArray[index];
 
         if (obj.hasOwnProperty(key)) {
-          obj = obj[key];
+          if (index === pathArray.length - 1) {
+            result = true;
+          } else {
+            obj = obj[key];
+          }
         } else {
           result = false;
           break;
@@ -66,7 +70,7 @@ module.exports = {
     return result;
   },
   indexOf: function(array, value) {
-    if (!this.isNull(array)) {
+    if (!this.isNil(array)) {
       return array.indexOf(value);
     } else {
       return -1;
@@ -76,7 +80,7 @@ module.exports = {
     return Array.isArray(value);
   },
   isEmpty: function(value) {
-    if (!this.isNull(value)) {
+    if (!this.isNil(value)) {
       if (typeof value.length === "number" && value.length === 0) {
         return true;
       } else if (typeof value.size === "number" && value.size === 0) {
@@ -90,10 +94,42 @@ module.exports = {
       return true;
     }
   },
-  isNull: function(value) {
+  isNil: function(value) {
     return value == null;
   },
+  isNull: function(value) {
+    return value === null;
+  },
   isNullOrEmpty: function(value) {
-    return this.isNull(value) || this.isEmpty(value);
+    return this.isNil(value) || this.isEmpty(value);
+  },
+  unset: function(obj, path) {
+    let result = false;
+
+    if (!this.isNil(obj) && !this.isNullOrEmpty(path)) {
+      let pathArray = [];
+
+      if (!Array.isArray(path)) {
+        pathArray = String(path).split(".");
+      }
+
+      for (let index = 0; index < pathArray.length; index++) {
+        const key = pathArray[index];
+
+        if (obj.hasOwnProperty(key)) {
+          if (index === pathArray.length - 1) {
+            delete obj[key];
+            result = true;
+          } else {
+            obj = obj[key];
+          }
+        } else {
+          result = false;
+          break;
+        }
+      }
+    } else result = false;
+
+    return result;
   }
 };

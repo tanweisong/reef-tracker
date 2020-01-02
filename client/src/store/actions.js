@@ -5,24 +5,6 @@ export default {
     context.commit('setLogin', payload);
   },
   setSettings(context, payload) {
-    if (!_.isEmpty(payload)) {
-      _.forOwn(payload, function(array, key) {
-        if (_.indexOf(['calcium', 'alkalinity', 'magnesium'], key) >= 0) {
-          if (_.isArray(array)) {
-            array.push({
-              brand: null,
-              dosage: null
-            });
-          }
-        }
-      });
-    } else
-      payload = {
-        calcium: [],
-        alkalinity: [],
-        magnesium: []
-      };
-
     context.commit('setSettings', payload);
   },
   setShowLoader(context, payload) {

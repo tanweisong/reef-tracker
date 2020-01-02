@@ -2,31 +2,50 @@
   <div class="home d-flex flex-column">
     <v-form>
       <v-row class="flex-grow-0">
-        <v-col cols="12" md="2" sm="3">
-          <v-text-field
-            type="date"
-            label="Date"
-            v-model="currentDate"
-            dense
-          ></v-text-field>
+        <v-col class="pb-0" cols="12" md="2" sm="3">
+          <v-dialog
+            ref="dialog"
+            v-model="modal"
+            :return-value.sync="currentDate"
+            persistent
+            width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="currentDate"
+                label="Date"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-on="on"
+                dense
+              ></v-text-field>
+            </template>
+            <v-date-picker v-model="currentDate" scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
+              <v-btn text color="primary" @click="$refs.dialog.save(currentDate)">OK</v-btn>
+            </v-date-picker>
+          </v-dialog>
         </v-col>
-        <v-col cols="12" md="2" sm="3">
+        <v-col class="pb-0" cols="12" md="2" sm="3">
           <v-text-field
             type="number"
             label="Calcium Consumption (PPM)"
             v-model="calciumConsumption"
+            step="0.1"
             dense
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="2" sm="3">
+        <v-col class="pb-0" cols="12" md="2" sm="3">
           <v-text-field
             type="number"
             label="Alkalinity Consumption (PPM)"
             v-model="alkalinityConsumption"
+            step="0.1"
             dense
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="2" sm="3">
+        <v-col class="pb-0" cols="12" md="2" sm="3">
           <v-text-field
             type="number"
             label="Magnesium Consumption (PPM)"
@@ -38,9 +57,7 @@
     </v-form>
     <v-row class="flex-grow-0">
       <v-col cols="12" md="2">
-        <v-btn color="teal darken-1" @click="updateConsumption" outlined small
-          >Update</v-btn
-        >
+        <v-btn color="teal darken-1" @click="updateConsumption" outlined small>Update</v-btn>
       </v-col>
     </v-row>
 
@@ -52,7 +69,7 @@
       <div v-if="activeLink === 1" class="pa-4 flex-grow-1">
         <v-form>
           <v-row class="flex-grow-0">
-            <v-col cols="12" sm="3" md="2">
+            <v-col class="pb-0" cols="12" sm="3" md="2">
               <v-select
                 label="Month"
                 :items="chartMonth"
@@ -61,7 +78,7 @@
                 @change="chartRangeChange"
               ></v-select>
             </v-col>
-            <v-col cols="12" sm="3" md="2">
+            <v-col class="pb-0" cols="12" sm="3" md="2">
               <v-select
                 label="Year"
                 :items="chartYear"
@@ -73,28 +90,19 @@
           </v-row>
         </v-form>
         <v-row>
-          <v-col cols="12" md="6" xl="4">
+          <v-col class="pb-0" cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="calciumChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="calciumChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
-          <v-col cols="12" md="6" xl="4">
+          <v-col class="pb-0" cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="alkalinityChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="alkalinityChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
-          <v-col cols="12" md="6" xl="4">
+          <v-col class="pb-0" cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="magnesiumChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="magnesiumChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
         </v-row>
@@ -102,7 +110,7 @@
       <div v-else class="pa-4 flex-grow-1">
         <v-form>
           <v-row class="flex-grow-0">
-            <v-col cols="12" sm="3" md="2">
+            <v-col class="pb-0" cols="12" sm="3" md="2">
               <v-select
                 label="Year"
                 :items="chartYear"
@@ -114,28 +122,19 @@
           </v-row>
         </v-form>
         <v-row>
-          <v-col cols="12" md="6" xl="4">
+          <v-col class="pb-0" cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="calciumChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="calciumChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
-          <v-col cols="12" md="6" xl="4">
+          <v-col class="pb-0" cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="alkalinityChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="alkalinityChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
-          <v-col cols="12" md="6" xl="4">
+          <v-col class="pb-0" cols="12" md="6" xl="4">
             <div class="position-relative chart-container">
-              <bar-chart
-                :chart-data="magnesiumChart"
-                :options="chartOptions"
-              ></bar-chart>
+              <bar-chart :chart-data="magnesiumChart" :options="chartOptions"></bar-chart>
             </div>
           </v-col>
         </v-row>
@@ -187,6 +186,8 @@ export default {
         maintainAspectRatio: false,
         responsive: true
       },
+      currentDate: new Date().toISOString().substr(0, 10),
+      modal: false,
       labels: [],
       calciumData: [],
       alkalinityData: [],
@@ -249,7 +250,7 @@ export default {
     const year = todayDate.getFullYear();
     const login = self.$store.getters.getLogin;
 
-    // if (_.isNull(login))
+    // if (_.isNil(login))
     //   self.$router.push({
     //     path: '/login'
     //   });
@@ -259,24 +260,6 @@ export default {
     self.getTrackings();
   },
   computed: {
-    currentDate: {
-      get() {
-        // input needs fullYear-fullMonth-fullDate
-        const self = this;
-
-        return `${self.selectedDate.getFullYear()}-${self.selectedDate.getMonth() +
-          1}-${
-          self.selectedDate.getDate() < 10
-            ? '0' + self.selectedDate.getDate()
-            : self.selectedDate.getDate()
-        }`;
-      },
-      set(value) {
-        const self = this;
-
-        self.selectedDate = new Date(value);
-      }
-    },
     chartYear() {
       const self = this;
       let currentYear = new Date().getFullYear();

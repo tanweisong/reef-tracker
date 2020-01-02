@@ -1,4 +1,6 @@
 const mongodb = require("mongodb");
+const dotenv = require("dotenv").config();
+const _ = require("../../functions/index");
 
 const getSettings = async () => {
   const settings = await loadSettingCollection();

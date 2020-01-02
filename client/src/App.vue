@@ -7,12 +7,7 @@
         <v-spacer></v-spacer>
 
         <v-toolbar-items>
-          <v-btn
-            text
-            v-show="$vuetify.breakpoint.mdAndUp"
-            small
-            @click="handleLinkClick('/')"
-          >
+          <v-btn text v-show="$vuetify.breakpoint.mdAndUp" small @click="handleLinkClick('/')">
             <v-icon>mdi-home</v-icon>
           </v-btn>
           <v-btn
@@ -31,12 +26,7 @@
           >
             <v-icon>mdi-settings</v-icon>
           </v-btn>
-          <v-btn
-            text
-            v-show="$vuetify.breakpoint.mdAndUp"
-            @click="handleLogout"
-            small
-          >
+          <v-btn text v-show="$vuetify.breakpoint.mdAndUp" @click="handleLogout" small>
             <v-icon>mdi-logout</v-icon>
           </v-btn>
           <v-menu offset-y>
@@ -76,7 +66,7 @@ export default {
   //   const self = this;
   //   const login = self.$store.getters.getLogin;
 
-  //   if (_.isNull(login))
+  //   if (_.isNil(login))
   //     self.$router.push({
   //       path: '/login'
   //     });
