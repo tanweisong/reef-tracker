@@ -185,11 +185,14 @@ export default {
   async mounted() {
     const self = this;
     const login = self.$store.getters.getLogin;
+    const settings = await SettingsService.getSettings();
 
     if (_.isNil(login))
       self.$router.push({
         path: '/login'
       });
+
+    self.$store.dispatch('setSettings', settings);
   },
   computed: {
     settings() {

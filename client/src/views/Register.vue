@@ -59,6 +59,10 @@
         </v-form>
       </v-card>
     </div>
+    <v-snackbar :color="snackbar.color" v-model="snackbar.visible" multi-line top right>
+      {{ snackbar.text }}
+      <v-btn text @click="snackbar = false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -73,6 +77,11 @@ export default {
       password: '',
       confirmPassword: '',
       timer: null,
+      snackbar: {
+        color: 'success',
+        text: '',
+        visible: false
+      },
       error: {
         email: '',
         password: '',
@@ -85,7 +94,10 @@ export default {
       passwordRules: [
         v => !_.isNullOrEmpty(v) || 'Password is required',
         v =>
-          (v && v.length >= 8) || 'Password must be at least 8 characters long'
+          (v && v.length >= 8) || 'Password must be at least 8 characters long',
+        v =>
+          this.specialCharCheck(v) ||
+          'Password must contains at least one of the following special character (!@#$%^&)'
       ]
     };
   },
@@ -153,7 +165,7 @@ export default {
         self.clearTimer();
       }, 300);
     },
-    handleRegister() {
+    async handleRegister() {
       const self = this;
 
       if (
@@ -161,6 +173,18 @@ export default {
         _.isNullOrEmpty(self.error.password) &&
         _.isNullOrEmpty(self.error.confirmPassword)
       ) {
+        const email = self.email;
+        const password = self.password;
+
+        const result = await LoginsService.createLogin({ email, password });
+
+        if (result) {
+          self.updateSnackbar('Account created successfully!', false, true);
+
+          self.$refs.form.reset();
+        } else {
+          self.updateSnackbar('Error creating account', true, true);
+        }
       }
     },
     async loginExists() {
@@ -170,6 +194,16 @@ export default {
 
       if (exists) self.error.email = 'Email is already taken.';
       else self.error.email = '';
+    },
+    specialCharCheck(value) {
+      return /^(?=.*[!@#$%^&])/.test(value);
+    },
+    updateSnackbar(message, error, show = false) {
+      const self = this;
+
+      self.$set(self.snackbar, 'text', message);
+      self.$set(self.snackbar, 'color', error ? 'error' : 'success');
+      self.$set(self.snackbar, 'visible', show);
     }
   }
 };

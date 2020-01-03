@@ -1,33 +1,61 @@
 const mongodb = require("mongodb");
+const _ = require("../../functions/index");
 
-const getTracking = async date => {
+const createTracking = async tracking => {
   const trackings = await loadTrackingCollection();
 
-  const tracking = await trackings.findOne({
-    date: { $eq: date }
-  });
+  if (!_.isNil(tracking)) tracking["_id"] = new mongodb.ObjectID();
 
-  return tracking;
+  const result = await trackings.insertOne(tracking);
+
+  return _.get(result, "result.ok") === 1;
 };
 
-const getTrackings = async () => {
+const trackingExists = async date => {
   const trackings = await loadTrackingCollection();
-  const results = await trackings.find({}).toArray();
+
+  const tracking = await trackings
+    .find({
+      date: { $eq: date }
+    })
+    .toArray();
+
+  return tracking.length > 0;
+};
+
+const getTrackings = async (startDate, endDate) => {
+  const trackings = await loadTrackingCollection();
+  let results = null;
+
+  if (_.isNullOrEmpty(startDate) && _.isNullOrEmpty(endDate))
+    results = await trackings.find({}).toArray();
+  else
+    results = await trackings
+      .find({
+        date: {
+          $gte: startDate,
+          $lt: endDate
+        }
+      })
+      .toArray();
 
   return results;
 };
 
-const updateTracking = async (trackingId, tracking) => {
+const updateTracking = async tracking => {
   const trackings = await loadTrackingCollection();
+  const date = tracking.date;
 
-  await trackings.updateOne(
+  const result = await trackings.updateOne(
     {
-      _id: new mongodb.ObjectId(trackingId)
+      date: date
     },
     {
       $set: tracking
     }
   );
+
+  return _.get(result, "result.ok") === 1;
 };
 
 async function loadTrackingCollection() {
@@ -45,7 +73,8 @@ async function loadTrackingCollection() {
 }
 
 module.exports = {
-  getTracking,
+  createTracking,
+  trackingExists,
   getTrackings,
   updateTracking
 };

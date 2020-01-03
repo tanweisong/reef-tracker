@@ -2,24 +2,22 @@ const mongodb = require("mongodb");
 const dotenv = require("dotenv").config();
 const _ = require("../../functions/index");
 
+const authLogin = async (email, password) => {
+  const logins = await loadLoginCollection();
+  const login = await logins.findOne({
+    email: email,
+    password: password
+  });
+
+  return !_.isNullOrEmpty(login);
+};
+
 const createLogin = async (email, password) => {
   const logins = await loadLoginCollection();
   await logins.insertOne({
     email,
     password
   });
-
-  await logins.findOne(
-    {
-      email: email
-    },
-    {
-      _id: 1,
-      email: 1,
-      minPaxPerTable: 1,
-      numOfTables: 1
-    }
-  );
 };
 
 const getLogin = async (email, bCount = false) => {
@@ -29,22 +27,17 @@ const getLogin = async (email, bCount = false) => {
       { $match: { email } },
       {
         $lookup: {
-          from: "tables",
+          from: "trackings",
           localField: "email",
           foreignField: "email",
-          as: "tables"
+          as: "trackings"
         }
       },
       {
         $project: {
           _id: 1,
           email: 1,
-          numOfTables: 1,
-          minPaxPerTable: 1,
-          tableConfigurations: 1,
-          tables: 1,
-          screens: 1,
-          entrances: 1
+          trackings: 1
         }
       }
     ])
@@ -95,6 +88,7 @@ async function loadLoginCollection() {
 }
 
 module.exports = {
+  authLogin,
   createLogin,
   getLogin,
   updateLogin

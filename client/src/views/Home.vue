@@ -1,6 +1,6 @@
 <template>
   <div class="home d-flex flex-column">
-    <v-form>
+    <v-form ref="form">
       <v-row class="flex-grow-0">
         <v-col class="pb-0" cols="12" md="2" sm="3">
           <v-dialog
@@ -32,6 +32,7 @@
             type="number"
             label="Calcium Consumption (PPM)"
             v-model="calciumConsumption"
+            :rules="calciumRules"
             step="0.1"
             dense
           ></v-text-field>
@@ -41,6 +42,7 @@
             type="number"
             label="Alkalinity Consumption (PPM)"
             v-model="alkalinityConsumption"
+            :rules="alkalinityRules"
             step="0.1"
             dense
           ></v-text-field>
@@ -50,6 +52,7 @@
             type="number"
             label="Magnesium Consumption (PPM)"
             v-model="magnesiumConsumption"
+            :rules="magnesiumRules"
             dense
           ></v-text-field>
         </v-col>
@@ -57,7 +60,7 @@
     </v-form>
     <v-row class="flex-grow-0">
       <v-col cols="12" md="2">
-        <v-btn color="teal darken-1" @click="updateConsumption" outlined small>Update</v-btn>
+        <v-btn color="teal darken-1" @click="handleUpdate" outlined small>Update</v-btn>
       </v-col>
     </v-row>
 
@@ -140,32 +143,28 @@
         </v-row>
       </div>
     </v-card>
+    <v-dialog v-model="overwriteDialog" max-width="320">
+      <v-card>
+        <v-card-title class="headline">Overwrite existing record?</v-card-title>
 
-    <!-- <b-modal
-      ref="zero-value-consumption-alert"
-      centered
-      title="Consumption(s) with zero value"
-      @cancel="cancelUpdate"
-      @ok="confirmUpdateConsumption"
-    >
-      <p class="my-4">
-        There are consumption(s) with zero value. Proceed with update?
-      </p>
-      <ul>
-        <li v-for="(item, index) in zeroAlert" :key="index">{{ item }}</li>
-      </ul>
-    </b-modal>-->
-    <!-- <b-modal
-      ref="tracking-exists-alert"
-      centered
-      title="Record with same date exists"
-      @cancel="cancelUpdate"
-    >
-      <p class="my-4">
-        A record with the same date already exists in the system. Overwrite the
-        record?
-      </p>
-    </b-modal>-->
+        <v-card-text>
+          A record with the same date already exists in the system. Overwrite the
+          record?
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="teal darken-1" text @click="cancelUpdate">No</v-btn>
+
+          <v-btn color="teal darken-1" text @click="() => createTracking(true)">Yes</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-snackbar :color="snackbar.color" v-model="snackbar.visible" multi-line top right>
+      {{ snackbar.text }}
+      <v-btn text @click="snackbar = false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -181,11 +180,26 @@ export default {
   },
   data() {
     return {
-      activeLink: 0,
+      activeLink: 1,
+      snackbar: {
+        color: 'success',
+        text: '',
+        visible: false
+      },
       chartOptions: {
         maintainAspectRatio: false,
-        responsive: true
+        responsive: true,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true
+              }
+            }
+          ]
+        }
       },
+      overwriteDialog: false,
       currentDate: new Date().toISOString().substr(0, 10),
       modal: false,
       labels: [],
@@ -214,33 +228,15 @@ export default {
         selectedMonth: new Date().getMonth() + 1,
         selectedYear: new Date().getFullYear()
       },
-      rules: {
-        calciumConsumption: {
-          rules: [
-            {
-              validator: this.notNegative,
-              message: 'Input cannot be negative value'
-            }
-          ]
-        },
-        alkalinityConsumption: {
-          rules: [
-            {
-              validator: this.notNegative,
-              message: 'Input cannot be negative value'
-            }
-          ]
-        },
-        magnesiumConsumption: {
-          rules: [
-            {
-              validator: this.notNegative,
-              message: 'Input cannot be negative value'
-            }
-          ]
-        }
-      },
-      selectedDate: new Date()
+      calciumRules: [
+        v => !_.isNullOrEmpty(v) || 'Calcium consumption is required'
+      ],
+      alkalinityRules: [
+        v => !_.isNullOrEmpty(v) || 'Alkalinity consumption is required'
+      ],
+      magnesiumRules: [
+        v => !_.isNullOrEmpty(v) || 'Magnesium consumption is required'
+      ]
     };
   },
   mounted() {
@@ -250,12 +246,10 @@ export default {
     const year = todayDate.getFullYear();
     const login = self.$store.getters.getLogin;
 
-    // if (_.isNil(login))
-    //   self.$router.push({
-    //     path: '/login'
-    //   });
-
-    self.activeLink = 1;
+    if (_.isNil(login))
+      self.$router.push({
+        path: '/login'
+      });
 
     self.getTrackings();
   },
@@ -338,11 +332,9 @@ export default {
       endDate = endDate.setDate(todayDate.getDate() + 1);
 
       if (month !== chartMonth || year !== chartYear) {
-        chartMonth = chartMonth + 1;
-
-        endDate = new Date(
-          `${chartYear}-${chartMonth < 10 ? '0' + chartMonth : chartMonth}-01`
-        );
+        endDate = new Date(endDate).setDate(1);
+        endDate = new Date(endDate).setFullYear(chartYear);
+        endDate = new Date(endDate).setMonth(new Date(endDate).getMonth() + 1);
       }
 
       return new Date(endDate);
@@ -382,7 +374,7 @@ export default {
     cancelUpdate() {
       const self = this;
 
-      self.zeroAlert = [];
+      self.overwriteDialog = false;
     },
     chartRangeChange() {
       const self = this;
@@ -402,33 +394,58 @@ export default {
         ]
       };
     },
-    async confirmUpdateConsumption() {
+    clearForm() {
       const self = this;
-      const tracking = await self.trackingExists();
 
-      if (!tracking) {
-        await TrackingsService.createTracking({
+      self.calciumConsumption = 0;
+      self.alkalinityConsumption = 0;
+      self.magnesiumConsumption = 0;
+    },
+    async createTracking(overwrite = false) {
+      const self = this;
+      let exists = false;
+
+      if (!overwrite) exists = await self.trackingExists();
+
+      self.overwriteDialog = false;
+
+      if (overwrite) {
+        let result = await TrackingsService.updateTracking({
           calcium: self.calciumConsumption,
           alkalinity: self.alkalinityConsumption,
           magnesium: self.magnesiumConsumption,
-          date: self.selectedDate,
-          startDate: self.startDate,
-          endDate: self.endDate
+          date: new Date(self.currentDate)
         });
 
-        self.calciumConsumption = 0;
-        self.alkalinityConsumption = 0;
-        self.magnesiumConsumption = 0;
+        if (!result) {
+          self.updateSnackbar('Error updating tracking.', true, true);
+        } else {
+          self.updateSnackbar('Tracking updating successfully!', false, true);
+        }
 
+        self.clearForm();
         self.getTrackings();
       } else {
-        this.$refs['tracking-exists-alert'].show();
-      }
-    },
-    consumptionChange(inProperty) {
-      const self = this;
+        if (!exists) {
+          let result = await TrackingsService.createTracking({
+            calcium: self.calciumConsumption,
+            alkalinity: self.alkalinityConsumption,
+            magnesium: self.magnesiumConsumption,
+            date: new Date(self.currentDate)
+          });
 
-      self.getState(inProperty);
+          if (!result) {
+            self.updateSnackbar('Error creating tracking.', true, true);
+          } else {
+            self.updateSnackbar('Tracking created successfully!', false, true);
+          }
+
+          self.clearForm();
+          self.getTrackings();
+        } else {
+          self.overwriteDialog = true;
+        }
+      }
     },
     async getTrackings() {
       const self = this;
@@ -489,36 +506,25 @@ export default {
     },
     async trackingExists() {
       const self = this;
+      const currentDate = self.currentDate;
 
-      const tracking = await TrackingsService.getTracking({
-        date: this.selectedDate
+      const exists = await TrackingsService.trackingExists({
+        date: new Date(currentDate)
       });
 
-      if (!self.isNullOrEmpty(tracking)) return true;
-      else return false;
+      return exists;
     },
-    updateConsumption() {
+    handleUpdate() {
       const self = this;
-      const calciumConsumption = self.calciumConsumption;
-      const alkalinityConsumption = self.alkalinityConsumption;
-      const magnesiumConsumption = self.magnesiumConsumption;
-      let zeroAlert = [];
 
-      if (calciumConsumption === 0) zeroAlert.push('Calcium');
+      if (self.$refs.form.validate()) self.createTracking();
+    },
+    updateSnackbar(message, error, show = false) {
+      const self = this;
 
-      if (alkalinityConsumption === 0) zeroAlert.push('Alkalinity');
-
-      if (magnesiumConsumption === 0) zeroAlert.push('Magnesium');
-
-      if (zeroAlert.length > 0) {
-        self.zeroAlert = zeroAlert;
-        this.$refs['zero-value-consumption-alert'].show();
-      } else {
-        var valid = this.validateRules();
-
-        if (!self.isNullOrEmpty(valid) && !valid) {
-        } else self.confirmUpdateConsumption();
-      }
+      self.$set(self.snackbar, 'text', message);
+      self.$set(self.snackbar, 'color', error ? 'error' : 'success');
+      self.$set(self.snackbar, 'visible', show);
     }
   }
 };

@@ -1,4 +1,18 @@
+const _ = require("../../functions/index");
 const loginsService = require("../services/logins.service");
+
+const authLogin = async (req, res, next) => {
+  const email = req.body.username;
+  const password = req.body.password;
+
+  try {
+    const result = await loginsService.authLogin(email, password);
+
+    res.send(result);
+  } catch (err) {
+    res.send(err);
+  }
+};
 
 const loginExists = async (req, res, next) => {
   const email = req.params.email;
@@ -14,6 +28,7 @@ const loginExists = async (req, res, next) => {
 
 const getLogin = async (req, res, next) => {
   const email = req.params.email;
+
   try {
     const login = await loginsService.getLogin(email);
 
@@ -30,9 +45,9 @@ const createLogin = async (req, res, next) => {
   try {
     await loginsService.createLogin(email, password);
 
-    const login = loginsService.getLogin(email);
+    const login = await loginsService.getLogin(email);
 
-    res.send(login);
+    res.send(!_.isNullOrEmpty(login));
   } catch (err) {
     res.send(err);
   }
@@ -54,6 +69,7 @@ const updateLogin = async (req, res, next) => {
 };
 
 module.exports = {
+  authLogin,
   getLogin,
   createLogin,
   updateLogin,

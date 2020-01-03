@@ -1,3 +1,5 @@
+const _ = require('../../../functions/index');
+
 export default {
   methods: {
     roundToDecimalPlaces(value, numOfDecimals) {
@@ -6,7 +8,7 @@ export default {
       else return null;
     },
     greaterThanZero(value) {
-      if (this.isNullOrEmpty(value)) {
+      if (_.isNullOrEmpty(value)) {
         return false;
       } else {
         if (isNaN(value)) {
@@ -21,7 +23,7 @@ export default {
       }
     },
     notNegative(value) {
-      if (this.isNullOrEmpty(value)) {
+      if (_.isNullOrEmpty(value)) {
         return false;
       } else {
         if (isNaN(value)) return false;

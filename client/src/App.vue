@@ -6,7 +6,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-toolbar-items>
+        <v-toolbar-items v-show="isLoggedIn">
           <v-btn text v-show="$vuetify.breakpoint.mdAndUp" small @click="handleLinkClick('/')">
             <v-icon>mdi-home</v-icon>
           </v-btn>
@@ -53,7 +53,7 @@
         </v-toolbar-items>
       </v-toolbar>
 
-      <router-view />
+      <router-view @loggedIn="loggedIn()" />
     </div>
   </v-app>
 </template>
@@ -62,15 +62,11 @@
 const _ = require('../../functions/index.js');
 
 export default {
-  // mounted() {
-  //   const self = this;
-  //   const login = self.$store.getters.getLogin;
-
-  //   if (_.isNil(login))
-  //     self.$router.push({
-  //       path: '/login'
-  //     });
-  // },
+  data() {
+    return {
+      isLoggedIn: false
+    };
+  },
   methods: {
     handleLinkClick(path) {
       const self = this;
@@ -81,7 +77,27 @@ export default {
         })
         .catch(err => {});
     },
-    handleLogout() {}
+    handleLogout() {
+      const self = this;
+
+      self.isLoggedIn = false;
+
+      self.$store.dispatch('setLogin', null);
+
+      self.$router
+        .push({
+          path: '/login'
+        })
+        .catch(err => {});
+    },
+    loggedIn() {
+      const self = this;
+      const login = self.$store.getters.getLogin;
+
+      self.isLoggedIn = !_.isNullOrEmpty(login);
+
+      return login;
+    }
   }
 };
 </script>

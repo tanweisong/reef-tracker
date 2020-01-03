@@ -103,6 +103,9 @@ module.exports = {
   isNullOrEmpty: function(value) {
     return this.isNil(value) || this.isEmpty(value);
   },
+  trim: function(value) {
+    return String(value).trim();
+  },
   unset: function(obj, path) {
     let result = false;
 

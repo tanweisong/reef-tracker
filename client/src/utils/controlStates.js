@@ -9,7 +9,7 @@ export default {
       if (!self.hasOwnProperty('rules'))
         console.error("no rules defined in component's data");
 
-      if (!_.isEmpty(rules) && !self.isNullOrEmpty(inProperty)) {
+      if (!_.isEmpty(rules) && !_.isNullOrEmpty(inProperty)) {
         const rule = _.get(rules, inProperty);
         let state = null;
         let message = null;
@@ -17,27 +17,28 @@ export default {
         const value = self[inProperty];
 
         if (!_.isEmpty(validations)) {
-          _.forEach(validations, function(validation) {
+          for (let index = 0; index < validations.length; index++) {
+            const validation = validations[index];
             const required = _.get(validation, 'required');
             const validator = _.get(validation, 'validator');
 
-            if (required && self.isNullOrEmpty(value)) {
+            if (required && _.isNullOrEmpty(value)) {
               state = false;
               message = _.get(validation, 'message');
 
-              return false;
+              break;
             } else if (
-              !self.isNullOrEmpty(validator) &&
+              !_.isNullOrEmpty(validator) &&
               typeof validator === 'function'
             ) {
               if (!validator(value)) {
                 state = false;
                 message = _.get(validation, 'message');
 
-                return false;
+                break;
               }
             }
-          });
+          }
         }
 
         self.$set(rule, 'state', state);
@@ -58,7 +59,7 @@ export default {
         _.forOwn(rules, function(value, key) {
           var state = self.getState(key);
 
-          if (!self.isNullOrEmpty(state) && !state) {
+          if (!_.isNullOrEmpty(state) && !state) {
             valid = false;
             return false;
           }

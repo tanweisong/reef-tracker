@@ -1,19 +1,38 @@
 const trackingsService = require("../services/trackings.service");
+const _ = require("../../functions/index");
 
-const getTracking = async (req, res, next) => {
+var startDate = null;
+var endDate = null;
+
+const createTracking = async (req, res, next) => {
   try {
-    const date = req.body.date;
-    const tracking = trackingsService.getTracking(date);
+    const tracking = req.body;
+    const result = await trackingsService.createTracking(tracking);
 
-    res.send(tracking);
+    res.send(result);
   } catch (err) {
     res.send(err);
   }
 };
 
-const getTrackings = async (req, res, next) => {
+const trackingExists = async (req, res, next) => {
   try {
-    const trackings = trackingsService.getTrackings();
+    const date = req.body.date;
+    const result = await trackingsService.trackingExists(date);
+
+    res.send(result);
+  } catch (err) {
+    res.send(err);
+  }
+};
+
+const getTrackingsByRange = async (req, res, next) => {
+  try {
+    if (_.has(req, "body.startDate")) startDate = req.body.startDate;
+
+    if (_.has(req, "body.endDate")) endDate = req.body.endDate;
+
+    const trackings = await trackingsService.getTrackings(startDate, endDate);
 
     res.send(trackings);
   } catch (err) {
@@ -23,21 +42,19 @@ const getTrackings = async (req, res, next) => {
 
 const updateTracking = async (req, res, next) => {
   try {
-    const trackingId = req.params.id;
     const tracking = req.body;
 
-    await trackingsService.updateTracking(trackingId, tracking);
+    const result = await trackingsService.updateTracking(tracking);
 
-    const trackings = trackingsService.getTrackings();
-
-    res.send(trackings);
+    res.send(result);
   } catch (err) {
     res.send(err);
   }
 };
 
 module.exports = {
-  getTracking,
-  getTrackings,
+  createTracking,
+  trackingExists,
+  getTrackingsByRange,
   updateTracking
 };

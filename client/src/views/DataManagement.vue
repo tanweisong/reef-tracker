@@ -8,7 +8,7 @@
             <v-expansion-panel-content>
               <v-form dense>
                 <v-row v-for="item in calcium" :key="item._id">
-                  <v-col cols="12" md="11">
+                  <v-col cols="12" md="10" lg="10">
                     <v-text-field
                       v-model="item.brand"
                       class="pt-0"
@@ -17,7 +17,7 @@
                       hide-details
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" md="1">
+                  <v-col cols="12" md="2" lg="2">
                     <v-text-field
                       type="number"
                       class="pt-0"
@@ -39,7 +39,7 @@
             <v-expansion-panel-content>
               <v-form dense>
                 <v-row v-for="item in alkalinity" :key="item._id">
-                  <v-col cols="12" md="11">
+                  <v-col cols="12" md="10" lg="10">
                     <v-text-field
                       v-model="item.brand"
                       class="pt-0"
@@ -48,7 +48,7 @@
                       hide-details
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" md="1">
+                  <v-col cols="12" md="2" lg="2">
                     <v-text-field
                       type="number"
                       class="pt-0"
@@ -71,7 +71,7 @@
             <v-expansion-panel-content>
               <v-form dense>
                 <v-row v-for="item in magnesium" :key="item._id">
-                  <v-col cols="12" md="11">
+                  <v-col cols="12" md="10" lg="10">
                     <v-text-field
                       v-model="item.brand"
                       class="pt-0"
@@ -80,7 +80,7 @@
                       hide-details
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" md="1">
+                  <v-col cols="12" md="2" lg="2">
                     <v-text-field
                       type="number"
                       class="pt-0"
@@ -103,6 +103,21 @@
       <v-btn class="float-left" color="teal darken-1" @click="handleUpdate" outlined small>Update</v-btn>
     </v-card>
     <Loader />
+    <v-dialog v-model="deleteDialog" max-width="320">
+      <v-card>
+        <v-card-title class="headline">Delete record?</v-card-title>
+
+        <v-card-text>Proceed with deleting the selected record?</v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="teal darken-1" text @click="cancelDelete">No</v-btn>
+
+          <v-btn color="teal darken-1" text @click="() => deleteItem(true)">Yes</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -117,6 +132,7 @@ export default {
   },
   data() {
     return {
+      deleteDialog: false,
       calcium: null,
       alkalinity: null,
       magnesium: null,
@@ -127,61 +143,69 @@ export default {
   async mounted() {
     const self = this;
     const login = self.$store.getters.getLogin;
+    const settings = await SettingsService.getSettings();
 
     if (_.isNil(login))
       self.$router.push({
         path: '/login'
       });
-  },
-  computed: {
-    settings: {
-      get() {
-        const self = this;
-        const settings = _.cloneDeep(self.$store.getters.getSettings);
 
-        if (!_.isNullOrEmpty(settings)) {
-          _.forOwn(settings, function(array, key) {
-            if (_.indexOf(['calcium', 'magnesium', 'alkalinity'], key) >= 0) {
-              if (_.isArray(array)) {
-                let items = array.slice();
-                let hasEmptyRow = false;
+    self.$store.dispatch('setSettings', settings);
 
-                for (let index = 0; index < items.length; index++) {
-                  const data = items[index];
-                  const brand = data.brand;
-                  const dosage = data.dosage;
+    if (!_.isNullOrEmpty(settings)) {
+      _.forOwn(settings, function(array, key) {
+        if (_.indexOf(['calcium', 'magnesium', 'alkalinity'], key) >= 0) {
+          if (_.isArray(array)) {
+            let items = array.slice();
+            let hasEmptyRow = false;
 
-                  if (_.isNullOrEmpty(brand) && _.isNullOrEmpty(dosage)) {
-                    hasEmptyRow = true;
-                    break;
-                  }
-                }
+            for (let index = 0; index < items.length; index++) {
+              const data = items[index];
+              const brand = data.brand;
+              const dosage = data.dosage;
 
-                if (!hasEmptyRow)
-                  items.push({
-                    _id: array.length + 1,
-                    brand: null,
-                    dosage: null
-                  });
-
-                self[key] = items;
+              if (_.isNullOrEmpty(brand) && _.isNullOrEmpty(dosage)) {
+                hasEmptyRow = true;
+                break;
               }
             }
-          });
 
-          return settings;
-        } else {
-          return {
-            _id: null,
-            calcium: [],
-            alkalinity: [],
-            magnesium: []
-          };
+            if (!hasEmptyRow)
+              items.push({
+                _id: array.length + 1,
+                brand: null,
+                dosage: null
+              });
+
+            self[key] = items;
+          }
         }
-      }
+      });
+
+      return settings;
+    } else {
+      return {
+        _id: null,
+        calcium: [],
+        alkalinity: [],
+        magnesium: []
+      };
     }
   },
   methods: {
+    cancelDelete() {
+      const self = this;
+
+      self.deleteDialog = false;
+    },
+    deleteItem(key, item) {
+      const self = this;
+    },
+    handleDelete(key, item) {
+      const self = this;
+
+      self.deleteDialog = true;
+    },
     handleDosageInput(key, item, numOfDecimals) {
       const self = this;
       let array = self[key];
