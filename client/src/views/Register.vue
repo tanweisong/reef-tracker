@@ -6,6 +6,7 @@
           <v-row>
             <v-col class="pb-0" cols="12">
               <v-text-field
+                id="email"
                 label="Email"
                 autocomplete="new-password"
                 v-model="email"
@@ -19,6 +20,7 @@
           <v-row>
             <v-col class="pb-0" cols="12">
               <v-text-field
+                id="password"
                 type="password"
                 label="Password"
                 autocomplete="new-password"
@@ -33,6 +35,7 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
+                id="confirmPassword"
                 type="password"
                 label="Confirm Password"
                 autocomplete="new-password"
@@ -47,19 +50,34 @@
           <v-row>
             <v-col cols="12">
               <v-btn
+                id="register"
                 class="float-right"
                 color="teal darken-1"
                 @click="handleRegister"
                 small
                 outlined
-              >Register</v-btn>
-              <v-btn class="float-right mr-2" @click="handleCancel" small outlined>Cancel</v-btn>
+                >Register</v-btn
+              >
+              <v-btn
+                id="cancel"
+                class="float-right mr-2"
+                @click="handleCancel"
+                small
+                outlined
+                >Cancel</v-btn
+              >
             </v-col>
           </v-row>
         </v-form>
       </v-card>
     </div>
-    <v-snackbar :color="snackbar.color" v-model="snackbar.visible" multi-line top right>
+    <v-snackbar
+      :color="snackbar.color"
+      v-model="snackbar.visible"
+      multi-line
+      top
+      right
+    >
       {{ snackbar.text }}
       <v-btn text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
@@ -108,9 +126,6 @@ export default {
       clearInterval(self.timer);
       self.timer = null;
     },
-    formIsValid() {
-      const self = this;
-    },
     handleCancel() {
       const self = this;
 
@@ -127,15 +142,13 @@ export default {
       }
 
       if (!_.isNullOrEmpty(email)) {
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
-          self.timer = setInterval(function() {
+        self.timer = setInterval(function() {
+          if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
             self.loginExists();
+          else self.error.email = 'Invalid email format';
 
-            self.clearTimer();
-          }, 300);
-        else {
-          self.error.email = 'Invalid email format';
-        }
+          self.clearTimer();
+        }, 300);
       } else {
         self.error.email = '';
       }
