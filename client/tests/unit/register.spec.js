@@ -20,29 +20,9 @@ describe('Register.vue', () => {
       vuetify
     });
 
-    expect(wrapper.find('#email').isVisible()).toBe(true);
-
-    expect(wrapper.find('#password').isVisible()).toBe(true);
-
-    expect(wrapper.find('#confirmPassword').isVisible()).toBe(true);
-  });
-
-  it('checks that handleRegister is fire upon clicking register', async () => {
-    const handleRegister = jest.fn();
-    const wrapper = mount(Register, {
-      localVue,
-      vuetify,
-      methods: {
-        handleRegister
-      }
-    });
-
-    const register = wrapper.find('#register');
-    register.trigger('click');
-
-    await wrapper.vm.$nextTick();
-
-    expect(handleRegister).toHaveBeenCalledTimes(1);
+    expect(wrapper.find('#email').isVisible()).toBeTruthy();
+    expect(wrapper.find('#password').isVisible()).toBeTruthy();
+    expect(wrapper.find('#confirmPassword').isVisible()).toBeTruthy();
   });
 
   it('renders 3 errors text when register is trigger on empty form', async () => {
@@ -57,24 +37,6 @@ describe('Register.vue', () => {
     await wrapper.vm.$nextTick();
 
     expect(wrapper.findAll('.v-messages.error--text').length).toBe(3);
-  });
-
-  it('checks that handleEmailInput is fire upon input email', async () => {
-    const handleEmailInput = jest.fn();
-    const wrapper = mount(Register, {
-      localVue,
-      vuetify,
-      methods: {
-        handleEmailInput
-      }
-    });
-
-    const email = wrapper.find('#email');
-    email.setValue('test@email.com');
-
-    await wrapper.vm.$nextTick();
-
-    expect(handleEmailInput).toHaveBeenCalledTimes(1);
   });
 
   it('renders correct error for email', async () => {
@@ -144,7 +106,7 @@ describe('Register.vue', () => {
     expect(handlePasswordInput).toHaveBeenCalledTimes(2);
   });
 
-  it('renders correct error for password', async () => {
+  it('renders correct errors for both passwords', async () => {
     const wrapper = mount(Register, {
       localVue,
       vuetify
@@ -179,24 +141,8 @@ describe('Register.vue', () => {
 
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.findAll('.v-messages__message').length).toBe(0);
-  });
-
-  it('renders errors on both password and confirm password when both do not match', async () => {
-    const wrapper = mount(Register, {
-      localVue,
-      vuetify
-    });
-
-    const password = wrapper.find('#password');
-    password.setValue('1234567@');
-
-    jest.runAllTimers();
-
-    await wrapper.vm.$nextTick();
-
     const confirmPassword = wrapper.find('#confirmPassword');
-    confirmPassword.setValue('12345678@');
+    confirmPassword.setValue('1234');
 
     jest.runAllTimers();
 
@@ -277,5 +223,29 @@ describe('Register.vue', () => {
     register.trigger('click');
 
     await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('.v-snack').isVisible()).toBeTruthy();
+    expect(wrapper.find('.v-snack__content').text()).toBe(
+      'Error creating account'
+    );
+
+    jest.runAllTimers();
+
+    await wrapper.vm.$nextTick();
+
+    email.setValue('valid@email.com');
+
+    jest.runAllTimers();
+
+    await wrapper.vm.$nextTick();
+
+    register.trigger('click');
+
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('.v-snack').isVisible()).toBeTruthy();
+    expect(wrapper.find('.v-snack__content').text()).toBe(
+      'Account created successfully!'
+    );
   });
 });

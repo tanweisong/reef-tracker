@@ -6,6 +6,7 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
+                id="username"
                 label="Username"
                 v-model="username"
                 autocomplete="new-password"
@@ -17,6 +18,7 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
+                id="password"
                 type="password"
                 label="Password"
                 v-model="password"
@@ -29,13 +31,20 @@
           <v-row>
             <v-col cols="12">
               <v-btn
+                id="login"
                 class="float-right"
                 color="teal darken-1"
                 @click="handleLogin"
                 small
                 outlined
               >Login</v-btn>
-              <v-btn class="float-right mr-2" @click="handleRegister" small outlined>Register</v-btn>
+              <v-btn
+                id="register"
+                class="float-right mr-2"
+                @click="handleRegister"
+                small
+                outlined
+              >Register</v-btn>
             </v-col>
           </v-row>
         </v-form>
@@ -109,11 +118,10 @@ export default {
     handleRegister() {
       const self = this;
 
-      self.$router
-        .push({
-          path: '/register'
-        })
-        .catch(err => {});
+      self.$router.push({
+        path: '/register'
+      });
+      // .catch(err => {});
     },
     updateSnackbar(message, error, show = false) {
       const self = this;
