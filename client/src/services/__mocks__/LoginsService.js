@@ -1,7 +1,8 @@
 class LoginsService {
   static authorizeLogin(login) {
     return new Promise(async (resolve, reject) => {
-      resolve(true);
+      if (login.username === 'valid@email.com') resolve(true);
+      else resolve(false);
     });
   }
 
@@ -14,14 +15,10 @@ class LoginsService {
 
   static getLogin(email) {
     return new Promise(async (resolve, reject) => {
-      try {
-        const res = await axios.get(`${url}/${email}`);
-        const data = res.data;
-
-        resolve(data);
-      } catch (err) {
-        reject(err);
-      }
+      resolve({
+        email: 'valid@email.com',
+        trackings: []
+      });
     });
   }
 

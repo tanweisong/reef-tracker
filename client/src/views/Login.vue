@@ -50,10 +50,13 @@
         </v-form>
       </v-card>
     </div>
-    <v-snackbar :color="snackbar.color" v-model="snackbar.visible" multi-line top right>
-      {{ snackbar.text }}
-      <v-btn text @click="snackbar.visible = false">Close</v-btn>
-    </v-snackbar>
+    <v-snackbar
+      :color="snackbar.color"
+      v-model="snackbar.visible"
+      multi-line
+      top
+      right
+    >{{ snackbar.text }}</v-snackbar>
     <Loader />
   </div>
 </template>
@@ -89,11 +92,10 @@ export default {
 
       self.$emit('loggedIn');
 
-      self.$router
-        .push({
-          path: '/'
-        })
-        .catch(err => {});
+      self.$router.push({
+        path: '/'
+      });
+      // .catch(err => {});
     },
     async handleLogin() {
       const self = this;
@@ -102,12 +104,13 @@ export default {
 
       self.$store.dispatch('setShowLoader', true);
 
-      const result = await LoginsService.authorizeLogin({
+      let result = await LoginsService.authorizeLogin({
         username,
         password
       });
 
       if (result) {
+        self.updateSnackbar('Invalid Login.', false, false);
         self.getLogin();
       } else {
         self.$store.dispatch('setShowLoader', false);

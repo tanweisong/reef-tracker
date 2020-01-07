@@ -31,8 +31,7 @@ describe('Register.vue', () => {
       vuetify
     });
 
-    const register = wrapper.find('#register');
-    register.trigger('click');
+    wrapper.find('#register').trigger('click');
 
     await wrapper.vm.$nextTick();
 
@@ -87,8 +86,7 @@ describe('Register.vue', () => {
       }
     });
 
-    const password = wrapper.find('#password');
-    password.setValue('1234567@');
+    wrapper.find('#password').setValue('1234567@');
 
     jest.runAllTimers();
 
@@ -96,8 +94,7 @@ describe('Register.vue', () => {
 
     expect(handlePasswordInput).toHaveBeenCalledTimes(1);
 
-    const confirmPassword = wrapper.find('#confirmPassword');
-    confirmPassword.setValue('1234567@');
+    wrapper.find('#confirmPassword').setValue('1234567@');
 
     jest.runAllTimers();
 
@@ -177,22 +174,22 @@ describe('Register.vue', () => {
         push: jest.fn()
       }
     };
-
     const wrapper = mount(Register, {
       localVue,
       vuetify,
       mocks
     });
 
-    const cancel = wrapper.find('#cancel');
-    cancel.trigger('click');
+    wrapper.find('#cancel').trigger('click');
 
     await wrapper.vm.$nextTick();
 
-    expect(mocks.$router.push).toHaveBeenCalledTimes(1);
+    expect(mocks.$router.push).toHaveBeenCalledWith({
+      path: '/login'
+    });
   });
 
-  it('registration successful', async () => {
+  it('renders correct error for registration', async () => {
     const wrapper = mount(Register, {
       localVue,
       vuetify
@@ -205,22 +202,19 @@ describe('Register.vue', () => {
 
     await wrapper.vm.$nextTick();
 
-    const password = wrapper.find('#password');
-    password.setValue('12345678@');
+    wrapper.find('#password').setValue('12345678@');
 
     jest.runAllTimers();
 
     await wrapper.vm.$nextTick();
 
-    const confirmPassword = wrapper.find('#confirmPassword');
-    confirmPassword.setValue('12345678@');
+    wrapper.find('#confirmPassword').setValue('12345678@');
 
     jest.runAllTimers();
 
     await wrapper.vm.$nextTick();
 
-    const register = wrapper.find('#register');
-    register.trigger('click');
+    wrapper.find('#register').trigger('click');
 
     await wrapper.vm.$nextTick();
 
@@ -239,7 +233,7 @@ describe('Register.vue', () => {
 
     await wrapper.vm.$nextTick();
 
-    register.trigger('click');
+    wrapper.find('#register').trigger('click');
 
     await wrapper.vm.$nextTick();
 
