@@ -1,6 +1,7 @@
 module.exports = {
   cloneDeep: function(obj) {
-    return JSON.parse(JSON.stringify(obj));
+    if (!this.isNil(obj)) return JSON.parse(JSON.stringify(obj));
+    else return obj;
   },
   forOwn: function(obj, fn) {
     if (!this.isNil(obj)) {
@@ -81,7 +82,9 @@ module.exports = {
   },
   isEmpty: function(value) {
     if (!this.isNil(value)) {
-      if (typeof value.length === "number" && value.length === 0) {
+      if (typeof value === "string" && this.trim(value) === "") {
+        return true;
+      } else if (typeof value.length === "number" && value.length === 0) {
         return true;
       } else if (typeof value.size === "number" && value.size === 0) {
         return true;

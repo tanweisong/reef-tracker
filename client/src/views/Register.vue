@@ -7,12 +7,15 @@
             <v-col class="pb-0" cols="12">
               <v-text-field
                 id="email"
+                ref="email"
                 label="Email"
                 autocomplete="new-password"
                 v-model="email"
                 :error-messages="error.email"
                 :rules="emailRules"
                 @input="handleEmailInput"
+                v-on:keyup.enter="handleEnter"
+                autofocus
                 dense
               ></v-text-field>
             </v-col>
@@ -28,6 +31,7 @@
                 :rules="passwordRules"
                 :error-messages="error.password"
                 @input="() => handlePasswordInput()"
+                v-on:keyup.enter="handleEnter"
                 dense
               ></v-text-field>
             </v-col>
@@ -43,6 +47,7 @@
                 :rules="confirmPasswordRules"
                 :error-messages="error.confirmPassword"
                 @input="() => handlePasswordInput(true)"
+                v-on:keyup.enter="handleEnter"
                 dense
               ></v-text-field>
             </v-col>
@@ -56,28 +61,20 @@
                 @click="handleRegister"
                 small
                 outlined
-                >Register</v-btn
-              >
+              >Register</v-btn>
               <v-btn
                 id="cancel"
                 class="float-right mr-2"
                 @click="handleCancel"
                 small
                 outlined
-                >Cancel</v-btn
-              >
+              >Cancel</v-btn>
             </v-col>
           </v-row>
         </v-form>
       </v-card>
     </div>
-    <v-snackbar
-      :color="snackbar.color"
-      v-model="snackbar.visible"
-      multi-line
-      top
-      right
-    >
+    <v-snackbar :color="snackbar.color" v-model="snackbar.visible" multi-line top right>
       {{ snackbar.text }}
       <!-- <v-btn text @click="snackbar = false">Close</v-btn> -->
     </v-snackbar>
@@ -178,6 +175,11 @@ export default {
         self.clearTimer();
       }, 300);
     },
+    handleEnter() {
+      const self = this;
+
+      self.handleRegister();
+    },
     async handleRegister() {
       const self = this;
 
@@ -195,6 +197,7 @@ export default {
           self.updateSnackbar('Account created successfully!', false, true);
 
           self.$refs.form.reset();
+          self.$refs.email.focus();
         } else {
           self.updateSnackbar('Error creating account', true, true);
         }
@@ -224,6 +227,7 @@ export default {
 
 <style lang="scss" scoped>
 .register {
+  background-color: #e0f2f1;
   height: calc(100vh - 48px);
 }
 </style>

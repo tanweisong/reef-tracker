@@ -34,6 +34,7 @@
             v-model="calciumConsumption"
             :rules="calciumRules"
             step="0.1"
+            autofocus
             dense
           ></v-text-field>
         </v-col>
@@ -532,6 +533,7 @@ export default {
 
 <style lang="scss" scoped>
 .home {
+  background-color: #e0f2f1;
   padding: 1rem;
   height: calc(100vh - 48px);
   overflow-y: auto;

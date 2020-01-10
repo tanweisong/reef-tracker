@@ -251,6 +251,7 @@ export default {
 
 <style lang="scss" scoped>
 .dosing-calculations {
+  background-color: #e0f2f1;
   padding: 1rem;
   & > .dosing-calculations-form-container {
     form {

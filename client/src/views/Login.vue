@@ -9,7 +9,9 @@
                 id="username"
                 label="Username"
                 v-model="username"
+                v-on:keyup.enter="handleEnter"
                 autocomplete="new-password"
+                autofocus
                 dense
                 hide-details
               ></v-text-field>
@@ -22,6 +24,7 @@
                 type="password"
                 label="Password"
                 v-model="password"
+                v-on:keyup.enter="handleEnter"
                 autocomplete="new-password"
                 dense
                 hide-details
@@ -62,6 +65,7 @@
 </template>
 
 <script>
+const _ = require('../../../functions/index.js');
 import LoginsService from '@/services/LoginsService';
 import Loader from '@/components/Loader';
 
@@ -96,6 +100,14 @@ export default {
         path: '/'
       });
       // .catch(err => {});
+    },
+    handleEnter() {
+      const self = this;
+      const username = self.username;
+      const password = self.password;
+
+      if (!_.isNullOrEmpty(username) && !_.isNullOrEmpty(password))
+        self.handleLogin();
     },
     async handleLogin() {
       const self = this;
@@ -139,6 +151,7 @@ export default {
 
 <style lang="scss" scoped>
 .login {
+  background-color: #e0f2f1;
   height: calc(100vh - 48px);
 }
 </style>

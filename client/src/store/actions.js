@@ -5,6 +5,13 @@ export default {
     context.commit('setLogin', payload);
   },
   setSettings(context, payload) {
+    if (_.isNullOrEmpty(payload))
+      payload = {
+        alkalinity: [],
+        calcium: [],
+        magnesium: []
+      };
+
     context.commit('setSettings', payload);
   },
   setShowLoader(context, payload) {

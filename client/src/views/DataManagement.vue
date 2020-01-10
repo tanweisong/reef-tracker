@@ -8,24 +8,57 @@
             <v-expansion-panel-content>
               <v-form dense>
                 <v-row v-for="item in calcium" :key="item._id">
-                  <v-col cols="12" md="10" lg="10">
+                  <v-col cols="12" sm="4" md="4" lg="4">
                     <v-text-field
                       v-model="item.brand"
                       class="pt-0"
                       label="Brand"
+                      prepend-icon="mdi-delete"
                       @input="handleInput('calcium')"
+                      @click:prepend="() => handleDelete('calcium', item)"
                       hide-details
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" md="2" lg="2">
+                  <v-col cols="12" sm="2" md="2" lg="1">
                     <v-text-field
                       type="number"
                       class="pt-0"
-                      label="Dosage"
-                      append-outer-icon="mdi-delete"
+                      label="Dose"
                       v-model="item.dosage"
                       @input="() => handleDosageInput('calcium', item, 1)"
-                      @click:append-outer="() => handleDelete('calcium', item)"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-select
+                      label="Dose UOM"
+                      class="pt-0"
+                      :items="uom"
+                      v-model="item.dosageUOM"
+                      hide-details
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-text-field
+                      type="number"
+                      class="pt-0"
+                      label="Per"
+                      v-model="item.per"
+                      @input="() => handleDosageInput('calcium', item, 1)"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-select label="UOM" class="pt-0" :items="uom" v-model="item.uom" hide-details></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-text-field
+                      type="number"
+                      class="pt-0"
+                      label="Increases"
+                      suffix="PPM"
+                      v-model="item.increase"
+                      @input="() => handleDosageInput('calcium', item, 1)"
                       hide-details
                     ></v-text-field>
                   </v-col>
@@ -39,25 +72,58 @@
             <v-expansion-panel-content>
               <v-form dense>
                 <v-row v-for="item in alkalinity" :key="item._id">
-                  <v-col cols="12" md="10" lg="10">
+                  <v-col cols="12" sm="4" md="4" lg="4">
                     <v-text-field
                       v-model="item.brand"
                       class="pt-0"
                       label="Brand"
+                      prepend-icon="mdi-delete"
                       @input="handleInput('alkalinity')"
+                      @click:prepend="() => handleDelete('alkalinity', item)"
                       hide-details
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" md="2" lg="2">
+                  <v-col cols="12" sm="2" md="2" lg="1">
                     <v-text-field
                       type="number"
                       class="pt-0"
-                      label="Dosage"
+                      label="Dose"
                       step=".1"
                       v-model="item.dosage"
-                      append-outer-icon="mdi-delete"
                       @input="() => handleDosageInput('alkalinity', item, 1)"
-                      @click:append-outer="() => handleDelete('alkalinity', item)"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-select
+                      label="Dose UOM"
+                      class="pt-0"
+                      :items="uom"
+                      v-model="item.dosageUOM"
+                      hide-details
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-text-field
+                      type="number"
+                      class="pt-0"
+                      label="Per"
+                      v-model="item.per"
+                      @input="() => handleDosageInput('alkalinity', item, 1)"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-select label="UOM" class="pt-0" :items="uom" v-model="item.uom" hide-details></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-text-field
+                      type="number"
+                      class="pt-0"
+                      label="Increases"
+                      suffix="dKH"
+                      v-model="item.increase"
+                      @input="() => handleDosageInput('alkalinity', item, 1)"
                       hide-details
                     ></v-text-field>
                   </v-col>
@@ -71,24 +137,58 @@
             <v-expansion-panel-content>
               <v-form dense>
                 <v-row v-for="item in magnesium" :key="item._id">
-                  <v-col cols="12" md="10" lg="10">
+                  <v-col cols="12" sm="4" md="4" lg="4">
                     <v-text-field
                       v-model="item.brand"
                       class="pt-0"
                       label="Brand"
+                      prepend-icon="mdi-delete"
                       @input="handleInput('magnesium')"
+                      @click:append-outer="() => handleDelete('magnesium', item)"
                       hide-details
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" md="2" lg="2">
+                  <v-col cols="12" sm="2" md="2" lg="1">
                     <v-text-field
                       type="number"
                       class="pt-0"
-                      label="Dosage"
+                      label="Dose"
+                      step=".1"
                       v-model="item.dosage"
-                      append-outer-icon="mdi-delete"
-                      @input="() => handleDosageInput('magnesium', item, 0)"
-                      @click:append-outer="() => handleDelete('magnesium', item)"
+                      @input="() => handleDosageInput('magnesium', item, 1)"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-select
+                      label="Dose UOM"
+                      class="pt-0"
+                      :items="uom"
+                      v-model="item.dosageUOM"
+                      hide-details
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-text-field
+                      type="number"
+                      class="pt-0"
+                      label="Per"
+                      v-model="item.per"
+                      @input="() => handleDosageInput('magnesium', item, 1)"
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-select label="UOM" class="pt-0" :items="uom" v-model="item.uom" hide-details></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="2" md="2" lg="1">
+                    <v-text-field
+                      type="number"
+                      class="pt-0"
+                      label="Increases"
+                      suffix="PPM"
+                      v-model="item.increase"
+                      @input="() => handleDosageInput('magnesium', item, 1)"
                       hide-details
                     ></v-text-field>
                   </v-col>
@@ -103,18 +203,18 @@
       <v-btn class="float-left" color="teal darken-1" @click="handleUpdate" outlined small>Update</v-btn>
     </v-card>
     <Loader />
-    <v-dialog v-model="deleteDialog" max-width="320">
+    <v-dialog v-model="deleteDialog.visible" max-width="320">
       <v-card>
         <v-card-title class="headline">Delete record?</v-card-title>
 
-        <v-card-text>Proceed with deleting the selected record?</v-card-text>
+        <v-card-text>Proceed with deleting {{ deleteDialog.text }}?</v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
           <v-btn color="teal darken-1" text @click="cancelDelete">No</v-btn>
 
-          <v-btn color="teal darken-1" text @click="() => deleteItem(true)">Yes</v-btn>
+          <v-btn color="teal darken-1" text @click="deleteItem">Yes</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -132,18 +232,29 @@ export default {
   },
   data() {
     return {
-      deleteDialog: false,
-      calcium: null,
-      alkalinity: null,
-      magnesium: null,
+      deleteDialog: {
+        visible: false,
+        text: '',
+        key: null,
+        item: null
+      },
+      calcium: [],
+      alkalinity: [],
+      magnesium: [],
       timer: null,
-      panel: [0, 1, 2]
+      panel: [0, 1, 2],
+      uom: [
+        { value: 'ml', text: 'mililitre' },
+        { value: 'l', text: 'litre' },
+        { value: 'g', text: 'gallon' }
+      ],
+      settings: null
     };
   },
   async mounted() {
     const self = this;
     const login = self.$store.getters.getLogin;
-    const settings = await SettingsService.getSettings();
+    let settings = await SettingsService.getSettings();
 
     if (_.isNil(login))
       self.$router.push({
@@ -151,6 +262,10 @@ export default {
       });
 
     self.$store.dispatch('setSettings', settings);
+
+    settings = self.$store.getters.getSettings;
+
+    self.settings = settings;
 
     if (!_.isNullOrEmpty(settings)) {
       _.forOwn(settings, function(array, key) {
@@ -161,10 +276,13 @@ export default {
 
             for (let index = 0; index < items.length; index++) {
               const data = items[index];
-              const brand = data.brand;
-              const dosage = data.dosage;
+              const brand = _.get(data, 'brand');
+              const dosage = _.get(data, 'dosage');
 
-              if (_.isNullOrEmpty(brand) && _.isNullOrEmpty(dosage)) {
+              if (
+                _.isNullOrEmpty(brand) &&
+                (_.isNullOrEmpty(dosage) || dosage === 0)
+              ) {
                 hasEmptyRow = true;
                 break;
               }
@@ -173,38 +291,80 @@ export default {
             if (!hasEmptyRow)
               items.push({
                 _id: array.length + 1,
-                brand: null,
-                dosage: null
+                brand: ' ',
+                dosage: 0,
+                dosageUOM: 'ml',
+                per: 0,
+                uom: 'l',
+                increase: 0
               });
 
             self[key] = items;
           }
         }
       });
-
-      return settings;
     } else {
-      return {
-        _id: null,
-        calcium: [],
-        alkalinity: [],
-        magnesium: []
-      };
+      self.calcium = [
+        {
+          _id: 1,
+          brand: ' ',
+          dosage: 0,
+          dosageUOM: 'ml',
+          per: 0,
+          uom: 'l',
+          increase: 0
+        }
+      ];
+      self.alkalinity = [
+        {
+          _id: 1,
+          brand: ' ',
+          dosage: 0,
+          dosageUOM: 'ml',
+          per: 0,
+          uom: 'l',
+          increase: 0
+        }
+      ];
+      self.magnesium = [
+        {
+          _id: 1,
+          brand: ' ',
+          dosage: 0,
+          dosageUOM: 'ml',
+          per: 0,
+          uom: 'l',
+          increase: 0
+        }
+      ];
     }
   },
   methods: {
     cancelDelete() {
       const self = this;
 
-      self.deleteDialog = false;
+      self.deleteDialog.visible = false;
     },
-    deleteItem(key, item) {
+    deleteItem() {
       const self = this;
+      const item = self.deleteDialog.item;
+      const key = self.deleteDialog.key;
+
+      if (!_.isNil(item) && !_.isNil(key)) {
+      }
     },
     handleDelete(key, item) {
       const self = this;
+      const brand = _.get(item, 'brand');
 
-      self.deleteDialog = true;
+      if (!_.isNullOrEmpty(brand)) {
+        self.deleteDialog = {
+          text: brand,
+          visible: true,
+          item: _.cloneDeep(item),
+          key
+        };
+      }
     },
     handleDosageInput(key, item, numOfDecimals) {
       const self = this;
@@ -270,8 +430,12 @@ export default {
 
           items.push({
             _id: ++position,
-            brand: null,
-            dosage: null
+            brand: ' ',
+            dosage: 0,
+            dosageUOM: 'ml',
+            per: 0,
+            uom: 'l',
+            increase: 0
           });
         }
 
@@ -285,7 +449,7 @@ export default {
       const self = this;
       const keys = ['alkalinity', 'calcium', 'magnesium'];
       let settings = _.cloneDeep(self.settings);
-      const settingsId = settings._id;
+      const settingsId = _.get(settings, '_id');
 
       for (let index = 0; index < keys.length; index++) {
         const key = keys[index];
@@ -312,11 +476,13 @@ export default {
       if (!_.isNullOrEmpty(array)) {
         for (let index = array.length - 1; index >= 0; index--) {
           const data = array[index];
-          const brand = data.brand;
-          const _id = data._id;
-          const dosage = data.dosage;
+          const brand = _.get(data, 'brand');
+          const dosage = _.get(data, 'dosage');
 
-          if (_.isNullOrEmpty(brand) && _.isNullOrEmpty(dosage))
+          if (
+            _.isNullOrEmpty(brand) &&
+            (_.isNullOrEmpty(dosage) || dosage === 0)
+          )
             array.splice(index, 1);
         }
       }
@@ -327,6 +493,7 @@ export default {
 
 <style lang="scss" scoped>
 .data-management {
+  background-color: #e0f2f1;
   padding: 1rem;
   height: calc(100vh - 48px);
   overflow-y: auto;
