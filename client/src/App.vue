@@ -114,5 +114,8 @@ html {
   .v-input {
     font-size: 1rem;
   }
+  .v-expansion-panel-header {
+    font-size: 1.25rem;
+  }
 }
 </style>

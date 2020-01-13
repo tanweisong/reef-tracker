@@ -1,161 +1,210 @@
 <template>
   <div class="dosing-calculations d-flex flex-column flex-grow-1">
-    <v-card class="flex-grow-1 pa-4">
+    <v-card class="flex-grow-0 pa-4 mb-4">
       <v-form class="flex-grow-1">
         <v-row>
-          <v-col cols="12" md="2" sm="4">
+          <v-col cols="12" sm="3" md="2" lg="2" xl="1">
             <v-text-field
               type="number"
-              label="Tank Volume (US Gallon)"
+              label="Tank Volume"
+              class="pt-0"
               min="0"
+              suffix="gallon(s)"
               v-model="gallon"
               @input="handleVolumeChange(true)"
-              dense
               hide-details
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="2" sm="4">
+          <v-col cols="12" sm="3" md="2" lg="2" xl="1">
             <v-text-field
               type="number"
-              label="Tank Volume (Litre)"
+              label="Tank Volume"
+              class="pt-0"
               min="0"
+              suffix="litre(s)"
               v-model="litre"
               @input="handleVolumeChange(false)"
-              dense
               hide-details
             ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="2" sm="4">
-            <v-text-field
-              type="number"
-              label="Current PPM (Calcium)"
-              v-model="currentCalcium"
-              dense
-              hide-details
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="2" sm="4">
-            <v-text-field
-              type="number"
-              label="Expected PPM (Calcium)"
-              v-model="expectedCalcium"
-              dense
-              hide-details
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="2" sm="4">
-            <v-select
-              label="Brand (Calcium)"
-              :items="settings.calcium"
-              item-text="brand"
-              item-value="_id"
-              dense
-              hide-details
-            ></v-select>
-          </v-col>
-          <v-col cols="12" md="2" sm="4">
-            <v-text-field
-              type="number"
-              label="Required Calcium"
-              v-model="neededCalcium"
-              disabled
-              dense
-              hide-details
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="2" sm="4">
-            <v-text-field
-              type="number"
-              label="Current PPM (Alkalinity)"
-              step=".1"
-              v-model="currentAlkalinity"
-              dense
-              hide-details
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="2" sm="4">
-            <v-text-field
-              type="number"
-              label="Expected PPM (Alkalinity)"
-              v-model="expectedAlkalinity"
-              step=".1"
-              dense
-              hide-details
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="2" sm="4">
-            <v-select
-              label="Brand (Alkalinity)"
-              :items="settings.alkalinity"
-              item-text="brand"
-              item-value="_id"
-              dense
-              hide-details
-            ></v-select>
-          </v-col>
-          <v-col cols="12" md="2" sm="4">
-            <v-text-field
-              type="number"
-              label="Required Alkalinity"
-              v-model="neededAlkalinity"
-              disabled
-              dense
-              hide-details
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="2" sm="4">
-            <v-text-field
-              type="number"
-              label="Current PPM (Magnesium)"
-              v-model="currentMagnesium"
-              dense
-              hide-details
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="2" sm="4">
-            <v-text-field
-              type="number"
-              label="Expected PPM (Magnesium)"
-              v-model="expectedMagnesium"
-              dense
-              hide-details
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" md="2" sm="4">
-            <v-select
-              label="Brand (Magnesium)"
-              :items="settings.magnesium"
-              item-text="brand"
-              item-value="_id"
-              dense
-              hide-details
-            ></v-select>
-          </v-col>
-          <v-col cols="12" md="2" sm="4">
-            <v-text-field
-              type="number"
-              label="Required Magnesium"
-              disabled
-              v-model="neededMagnesium"
-              dense
-              hide-details
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="pb-0" cols="12" md="12" lg="12">
-            <v-btn color="teal darken-1" @click="calculateDosage" small outlined>
-              <span>Calculate</span>
-            </v-btn>
           </v-col>
         </v-row>
       </v-form>
+    </v-card>
+    <div class="flex-grow-1">
+      <v-expansion-panels v-model="panel" multiple readonly>
+        <v-expansion-panel>
+          <v-expansion-panel-header class="py-0">Calcium</v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-form>
+              <v-row>
+                <v-col cols="12" sm="3" md="2" lg="2" xl="1">
+                  <v-text-field
+                    type="number"
+                    label="Current"
+                    class="pt-0"
+                    suffix="PPM"
+                    v-model="calcium.current"
+                    :error-messages="calcium.error"
+                    @input="() => handleInput('calcium')"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="3" md="2" lg="2" xl="1">
+                  <v-text-field
+                    type="number"
+                    label="Expected"
+                    class="pt-0"
+                    suffix="PPM"
+                    v-model="calcium.expected"
+                    @input="() => handleInput('calcium')"
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="5" md="4" lg="3" xl="2">
+                  <v-select
+                    label="Brand"
+                    class="pt-0"
+                    v-model="calcium.brand"
+                    :items="settings.calcium"
+                    item-text="brand"
+                    item-value="_id"
+                    hide-details
+                  ></v-select>
+                </v-col>
+                <v-col cols="12" sm="3" md="2" lg="2" xl="1">
+                  <v-text-field
+                    type="number"
+                    label="Required"
+                    class="pt-0"
+                    :suffix="calcium.requiredSuffix"
+                    v-model="calcium.required"
+                    disabled
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+
+        <v-expansion-panel>
+          <v-expansion-panel-header class="py-0">Alkalinity</v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-form>
+              <v-row>
+                <v-col cols="12" sm="3" md="2" lg="2" xl="1">
+                  <v-text-field
+                    type="number"
+                    label="Current"
+                    class="pt-0"
+                    step=".1"
+                    suffix="dKH"
+                    v-model="alkalinity.current"
+                    :error-messages="alkalinity.error"
+                    @input="() => handleInput('alkalinity')"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="3" md="2" lg="2" xl="1">
+                  <v-text-field
+                    type="number"
+                    label="Expected"
+                    class="pt-0"
+                    suffix="dKH"
+                    v-model="alkalinity.expected"
+                    @input="() => handleInput('alkalinity')"
+                    step=".1"
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="5" md="4" lg="3" xl="2">
+                  <v-select
+                    label="Brand"
+                    class="pt-0"
+                    v-model="alkalinity.brand"
+                    :items="settings.alkalinity"
+                    item-text="brand"
+                    item-value="_id"
+                    hide-details
+                  ></v-select>
+                </v-col>
+                <v-col cols="12" sm="3" md="2" lg="2" xl="1">
+                  <v-text-field
+                    type="number"
+                    label="Required"
+                    class="pt-0"
+                    :suffix="alkalinity.requiredSuffix"
+                    v-model="alkalinity.required"
+                    disabled
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+
+        <v-expansion-panel>
+          <v-expansion-panel-header class="py-0">Magnesium</v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-form>
+              <v-row>
+                <v-col cols="12" sm="3" md="2" lg="2" xl="1">
+                  <v-text-field
+                    type="number"
+                    label="Current"
+                    class="pt-0"
+                    suffix="PPM"
+                    v-model="magnesium.current"
+                    :error-messages="magnesium.error"
+                    @input="() => handleInput('magnesium')"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="3" md="2" lg="2" xl="1">
+                  <v-text-field
+                    type="number"
+                    label="Expected"
+                    class="pt-0"
+                    suffix="PPM"
+                    v-model="magnesium.expected"
+                    @input="() => handleInput('magnesium')"
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="5" md="4" lg="3" xl="2">
+                  <v-select
+                    label="Brand"
+                    class="pt-0"
+                    v-model="magnesium.brand"
+                    :items="settings.magnesium"
+                    item-text="brand"
+                    item-value="_id"
+                    hide-details
+                  ></v-select>
+                </v-col>
+                <v-col cols="12" sm="3" md="2" lg="2" xl="1">
+                  <v-text-field
+                    type="number"
+                    label="Required"
+                    class="pt-0"
+                    :suffix="magnesium.requiredSuffix"
+                    v-model="magnesium.required"
+                    disabled
+                    hide-details
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </div>
+    <v-card class="pa-4 flex-grow-0 mt-3">
+      <v-row>
+        <v-col class="py-0" cols="12" md="12" lg="12">
+          <v-btn color="teal darken-1" @click="calculateDosage" small outlined>
+            <span>Calculate</span>
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-card>
   </div>
 </template>
@@ -170,16 +219,32 @@ export default {
       gallon: 0,
       litre: 0,
       gallonToLitre: 3.78541,
-      currentCalcium: 0,
-      expectedCalcium: 480,
-      currentAlkalinity: 0,
-      expectedAlkalinity: 8.1,
-      currentMagnesium: 0,
-      expectedMagnesium: 1300,
-      neededCalcium: 0,
-      neededAlkalinity: 0,
-      neededMagnesium: 0,
-      timer: null
+      calcium: {
+        current: 0,
+        expected: 480,
+        brand: null,
+        required: 0,
+        requiredSuffix: '',
+        error: ''
+      },
+      alkalinity: {
+        current: 0,
+        expected: 8.1,
+        brand: null,
+        required: 0,
+        requiredSuffix: '',
+        error: ''
+      },
+      magnesium: {
+        current: 0,
+        expected: 1300,
+        brand: null,
+        required: 0,
+        requiredSuffix: '',
+        error: ''
+      },
+      timer: null,
+      panel: [0, 1, 2]
     };
   },
   async mounted() {
@@ -202,13 +267,93 @@ export default {
     }
   },
   methods: {
+    calculate(key) {
+      const self = this;
+      const obj = self[key];
+      const current = _.get(obj, 'current');
+      const expected = _.get(obj, 'expected');
+      const litre = self.litre;
+      const brand = _.get(obj, 'brand');
+
+      if (
+        !_.isNullOrEmpty(current) &&
+        !_.isNullOrEmpty(expected) &&
+        !_.isNullOrEmpty(litre) &&
+        !_.isNullOrEmpty(brand)
+      ) {
+        if (current > 0 && expected > 0 && litre > 0) {
+          const setting = self.settings[key][brand - 1];
+
+          if (!_.isNil(setting)) {
+            const required = expected - current;
+            const uom = _.get(setting, 'uom');
+            let per = _.get(setting, 'per');
+            let dosage = _.get(setting, 'dosage');
+            let increase = _.get(setting, 'increase');
+
+            if (!_.isNullOrEmpty(dosage)) {
+              dosage = Number(dosage);
+            }
+
+            if (!_.isNullOrEmpty(increase)) {
+              increase = Number(increase);
+            }
+
+            if (uom === 'g') {
+              per = per * self.gallonToLitre;
+            } else {
+            }
+
+            let reqDosage = (required / increase) * dosage;
+            reqDosage = (litre / per) * reqDosage;
+
+            self[key].required = reqDosage;
+            self[key].requiredSuffix = _.get(setting, 'dosageUOM');
+          } else {
+            self[key].required = 0;
+            self[key].requiredSuffix = '';
+          }
+        } else {
+          self[key].required = 0;
+        }
+      } else {
+        self[key].required = 0;
+      }
+    },
     calculateDosage() {
       const self = this;
-      const calcium = _.get(self, 'calcium');
-      const alkalinity = _.get(self, 'alkalinity');
-      const magnesium = _.get(self, 'magnesium');
 
-      self.validateRules();
+      self.calculate('alkalinity');
+      self.calculate('calcium');
+      self.calculate('magnesium');
+    },
+    clearTimer() {
+      const self = this;
+
+      clearInterval(self.timer);
+      self.timer = null;
+    },
+    handleInput(key) {
+      const self = this;
+      const timer = self.timer;
+
+      if (!_.isNil(timer)) {
+        self.clearTimer();
+      }
+
+      self.timer = setInterval(function() {
+        const obj = self[key];
+        const objCurrent = _.get(obj, 'current');
+        const objExpected = _.get(obj, 'expected');
+
+        if (objCurrent > objExpected) {
+          self[
+            key
+          ].error = `Current ${key} cannot be lesser than expected ${key}`;
+        } else {
+          self[key].error = '';
+        }
+      }, 200);
     },
     handleVolumeChange(bGallon) {
       const self = this;
@@ -217,8 +362,7 @@ export default {
       const gallonToLitre = self.gallonToLitre;
 
       if (!_.isNil(self.timer)) {
-        clearInterval(self.timer);
-        self.timer = null;
+        self.clearTimer();
       }
 
       self.timer = setInterval(function() {
@@ -238,9 +382,6 @@ export default {
           }
         }
 
-        self.getState('gallon');
-        self.getState('litre');
-
         clearInterval(self.timer);
         self.timer = null;
       }, 300);
@@ -253,13 +394,7 @@ export default {
 .dosing-calculations {
   background-color: #e0f2f1;
   padding: 1rem;
-  & > .dosing-calculations-form-container {
-    form {
-      width: 250px;
-    }
-    & > form:not(:last-child) {
-      margin-right: 1rem;
-    }
-  }
+  height: calc(100vh - 48px);
+  overflow-y: auto;
 }
 </style>

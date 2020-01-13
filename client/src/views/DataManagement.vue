@@ -246,7 +246,8 @@ export default {
       uom: [
         { value: 'ml', text: 'mililitre' },
         { value: 'l', text: 'litre' },
-        { value: 'g', text: 'gallon' }
+        { value: 'g', text: 'gallon' },
+        {value : 'gram', text : 'gram'}
       ],
       settings: null
     };
