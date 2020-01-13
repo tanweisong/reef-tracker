@@ -1,69 +1,71 @@
 <template>
   <div class="home d-flex flex-column">
-    <v-form ref="form">
+    <v-card class="flex-grow-0 pa-4 mb-3">
+      <v-form ref="form">
+        <v-row class="flex-grow-0">
+          <v-col class="pb-0" cols="12" md="2" sm="3">
+            <v-dialog
+              ref="dialog"
+              v-model="modal"
+              :return-value.sync="currentDate"
+              persistent
+              width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="currentDate"
+                  label="Date"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  v-on="on"
+                  dense
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="currentDate" scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
+                <v-btn text color="primary" @click="$refs.dialog.save(currentDate)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
+          </v-col>
+          <v-col class="pb-0" cols="12" md="2" sm="3">
+            <v-text-field
+              type="number"
+              label="Calcium Consumption (PPM)"
+              v-model="calciumConsumption"
+              :rules="calciumRules"
+              step="0.1"
+              autofocus
+              dense
+            ></v-text-field>
+          </v-col>
+          <v-col class="pb-0" cols="12" md="2" sm="3">
+            <v-text-field
+              type="number"
+              label="Alkalinity Consumption (PPM)"
+              v-model="alkalinityConsumption"
+              :rules="alkalinityRules"
+              step="0.1"
+              dense
+            ></v-text-field>
+          </v-col>
+          <v-col class="pb-0" cols="12" md="2" sm="3">
+            <v-text-field
+              type="number"
+              label="Magnesium Consumption (PPM)"
+              v-model="magnesiumConsumption"
+              :rules="magnesiumRules"
+              dense
+            ></v-text-field>
+          </v-col>
+        </v-row>
+      </v-form>
       <v-row class="flex-grow-0">
-        <v-col class="pb-0" cols="12" md="2" sm="3">
-          <v-dialog
-            ref="dialog"
-            v-model="modal"
-            :return-value.sync="currentDate"
-            persistent
-            width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="currentDate"
-                label="Date"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-on="on"
-                dense
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="currentDate" scrollable>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="$refs.dialog.save(currentDate)">OK</v-btn>
-            </v-date-picker>
-          </v-dialog>
-        </v-col>
-        <v-col class="pb-0" cols="12" md="2" sm="3">
-          <v-text-field
-            type="number"
-            label="Calcium Consumption (PPM)"
-            v-model="calciumConsumption"
-            :rules="calciumRules"
-            step="0.1"
-            autofocus
-            dense
-          ></v-text-field>
-        </v-col>
-        <v-col class="pb-0" cols="12" md="2" sm="3">
-          <v-text-field
-            type="number"
-            label="Alkalinity Consumption (PPM)"
-            v-model="alkalinityConsumption"
-            :rules="alkalinityRules"
-            step="0.1"
-            dense
-          ></v-text-field>
-        </v-col>
-        <v-col class="pb-0" cols="12" md="2" sm="3">
-          <v-text-field
-            type="number"
-            label="Magnesium Consumption (PPM)"
-            v-model="magnesiumConsumption"
-            :rules="magnesiumRules"
-            dense
-          ></v-text-field>
+        <v-col cols="12" md="2">
+          <v-btn color="teal darken-1" @click="handleUpdate" outlined small>Update</v-btn>
         </v-col>
       </v-row>
-    </v-form>
-    <v-row class="flex-grow-0">
-      <v-col cols="12" md="2">
-        <v-btn color="teal darken-1" @click="handleUpdate" outlined small>Update</v-btn>
-      </v-col>
-    </v-row>
+    </v-card>
 
     <v-card class="d-flex flex-column flex-grow-1">
       <v-tabs class="flex-grow-0" background-color="teal" dark>

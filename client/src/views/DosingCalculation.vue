@@ -33,7 +33,9 @@
     <div class="flex-grow-1">
       <v-expansion-panels v-model="panel" multiple readonly>
         <v-expansion-panel>
-          <v-expansion-panel-header class="py-0">Calcium</v-expansion-panel-header>
+          <v-expansion-panel-header
+            class="py-0"
+          >Calcium (Recommended not to dose more than 20 ppm / day)</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-form>
               <v-row>
@@ -87,7 +89,9 @@
         </v-expansion-panel>
 
         <v-expansion-panel>
-          <v-expansion-panel-header class="py-0">Alkalinity</v-expansion-panel-header>
+          <v-expansion-panel-header
+            class="py-0"
+          >Alkalinity (Recommended not to dose more than 1 dKH / day)</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-form>
               <v-row>
@@ -143,7 +147,9 @@
         </v-expansion-panel>
 
         <v-expansion-panel>
-          <v-expansion-panel-header class="py-0">Magnesium</v-expansion-panel-header>
+          <v-expansion-panel-header
+            class="py-0"
+          >Magnesium (Recommended not to dose more than 20 ppm / day)</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-form>
               <v-row>
