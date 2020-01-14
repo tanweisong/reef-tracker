@@ -149,7 +149,7 @@
         <v-expansion-panel>
           <v-expansion-panel-header
             class="py-0"
-          >Magnesium (Recommended not to dose more than 20 ppm / day)</v-expansion-panel-header>
+          >Magnesium (Recommended not to dose more than 50 ppm / day)</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-form>
               <v-row>

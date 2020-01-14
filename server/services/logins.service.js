@@ -48,6 +48,12 @@ const getLogin = async (email, bCount = false) => {
   } else {
     if (login.length > 0) login = login[0];
 
+    if (email === "admin") {
+      login["role"] = "admin";
+    } else {
+      login["role"] = "user";
+    }
+
     return login;
   }
 };

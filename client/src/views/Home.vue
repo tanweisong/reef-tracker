@@ -15,10 +15,10 @@
                 <v-text-field
                   v-model="currentDate"
                   label="Date"
+                  class="pt-0"
                   prepend-icon="mdi-calendar"
                   readonly
                   v-on="on"
-                  dense
                 ></v-text-field>
               </template>
               <v-date-picker v-model="currentDate" scrollable>
@@ -31,31 +31,34 @@
           <v-col class="pb-0" cols="12" md="2" sm="3">
             <v-text-field
               type="number"
-              label="Calcium Consumption (PPM)"
+              label="Calcium Consumption"
+              class="pt-0"
+              suffix="PPM"
               v-model="calciumConsumption"
               :rules="calciumRules"
               step="0.1"
               autofocus
-              dense
             ></v-text-field>
           </v-col>
           <v-col class="pb-0" cols="12" md="2" sm="3">
             <v-text-field
               type="number"
-              label="Alkalinity Consumption (PPM)"
+              label="Alkalinity Consumption"
+              class="pt-0"
+              suffix="dKH"
               v-model="alkalinityConsumption"
               :rules="alkalinityRules"
               step="0.1"
-              dense
             ></v-text-field>
           </v-col>
           <v-col class="pb-0" cols="12" md="2" sm="3">
             <v-text-field
               type="number"
-              label="Magnesium Consumption (PPM)"
+              label="Magnesium Consumption"
+              class="pt-0"
+              suffix="PPM"
               v-model="magnesiumConsumption"
               :rules="magnesiumRules"
-              dense
             ></v-text-field>
           </v-col>
         </v-row>

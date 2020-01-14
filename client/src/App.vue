@@ -20,7 +20,7 @@
           </v-btn>
           <v-btn
             text
-            v-show="$vuetify.breakpoint.mdAndUp"
+            v-show="$vuetify.breakpoint.mdAndUp && isSuperuser"
             @click="handleLinkClick('/data-management')"
             small
           >
@@ -42,7 +42,7 @@
               <v-list-item @click="handleLinkClick('/dosing-calculation')">
                 <v-list-item-title>Dosing Calculation</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="handleLinkClick('/data-management')">
+              <v-list-item v-show="isSuperuser" @click="handleLinkClick('/data-management')">
                 <v-list-item-title>Data Management</v-list-item-title>
               </v-list-item>
               <v-list-item @click="handleLogout">
@@ -64,7 +64,8 @@ const _ = require('../../functions/index.js');
 export default {
   data() {
     return {
-      isLoggedIn: false
+      isLoggedIn: false,
+      isSuperuser: false
     };
   },
   methods: {
@@ -95,6 +96,7 @@ export default {
       const login = self.$store.getters.getLogin;
 
       self.isLoggedIn = !_.isNullOrEmpty(login);
+      self.isSuperuser = _.get(login, 'role') === 'admin';
 
       return login;
     }

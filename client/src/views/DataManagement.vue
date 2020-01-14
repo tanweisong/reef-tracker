@@ -49,7 +49,13 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="2" md="2" lg="1">
-                    <v-select label="UOM" class="pt-0" :items="uom" v-model="item.uom" hide-details></v-select>
+                    <v-select
+                      label="UOM"
+                      class="pt-0"
+                      :items="volumeUOM"
+                      v-model="item.uom"
+                      hide-details
+                    ></v-select>
                   </v-col>
                   <v-col cols="12" sm="2" md="2" lg="1">
                     <v-text-field
@@ -114,7 +120,13 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="2" md="2" lg="1">
-                    <v-select label="UOM" class="pt-0" :items="uom" v-model="item.uom" hide-details></v-select>
+                    <v-select
+                      label="UOM"
+                      class="pt-0"
+                      :items="volumeUOM"
+                      v-model="item.uom"
+                      hide-details
+                    ></v-select>
                   </v-col>
                   <v-col cols="12" sm="2" md="2" lg="1">
                     <v-text-field
@@ -179,7 +191,13 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="2" md="2" lg="1">
-                    <v-select label="UOM" class="pt-0" :items="uom" v-model="item.uom" hide-details></v-select>
+                    <v-select
+                      label="UOM"
+                      class="pt-0"
+                      :items="volumeUOM"
+                      v-model="item.uom"
+                      hide-details
+                    ></v-select>
                   </v-col>
                   <v-col cols="12" sm="2" md="2" lg="1">
                     <v-text-field
@@ -245,9 +263,11 @@ export default {
       panel: [0, 1, 2],
       uom: [
         { value: 'ml', text: 'mililitre' },
+        { value: 'gram', text: 'gram' }
+      ],
+      volumeUOM: [
         { value: 'l', text: 'litre' },
-        { value: 'g', text: 'gallon' },
-        {value : 'gram', text : 'gram'}
+        { value: 'g', text: 'gallon' }
       ],
       settings: null
     };
