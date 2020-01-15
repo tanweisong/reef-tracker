@@ -30,6 +30,7 @@
           </v-col>
           <v-col class="pb-0" cols="12" md="2" sm="3">
             <v-text-field
+              id="calcium"
               type="number"
               label="Calcium Consumption"
               class="pt-0"
@@ -42,6 +43,7 @@
           </v-col>
           <v-col class="pb-0" cols="12" md="2" sm="3">
             <v-text-field
+              id="alkalinity"
               type="number"
               label="Alkalinity Consumption"
               class="pt-0"
@@ -53,6 +55,7 @@
           </v-col>
           <v-col class="pb-0" cols="12" md="2" sm="3">
             <v-text-field
+              id="magnesium"
               type="number"
               label="Magnesium Consumption"
               class="pt-0"
@@ -65,7 +68,7 @@
       </v-form>
       <v-row class="flex-grow-0">
         <v-col cols="12" md="2">
-          <v-btn color="teal darken-1" @click="handleUpdate" outlined small>Update</v-btn>
+          <v-btn id="update" color="teal darken-1" @click="handleUpdate" outlined small>Update</v-btn>
         </v-col>
       </v-row>
     </v-card>

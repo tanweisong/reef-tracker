@@ -60,6 +60,67 @@ describe('Login.vue', () => {
     });
   });
 
+  it('both username and password is filled up and pressing enter key on either field triggers handleEnter', async () => {
+    const handleEnter = jest.fn();
+    const handleLogin = jest.fn();
+    const mocks = {
+      $store: {
+        dispatch: jest.fn(),
+        actions: {
+          setLogin: jest.fn(),
+          setShowLoader: jest.fn()
+        },
+        getters: {
+          getShowLoader: jest.fn()
+        }
+      },
+      $router: {
+        push: jest.fn()
+      }
+    };
+
+    const wrapper = mount(Login, {
+      localVue,
+      vuetify,
+
+      methods: {
+        handleEnter,
+        handleLogin
+      },
+      mocks
+    });
+
+    wrapper.setData({
+      username: '',
+      password: ''
+    });
+
+    const username = wrapper.find('#username');
+    const password = wrapper.find('#password');
+
+    username.trigger('keydown.enter');
+
+    expect(handleEnter).toHaveBeenCalled();
+    expect(handleLogin).toHaveBeenCalledTimes(0);
+
+    password.trigger('keydown.enter');
+
+    expect(handleEnter).toHaveBeenCalled();
+    expect(handleLogin).toHaveBeenCalledTimes(0);
+
+    wrapper.setData({
+      username: 'valid@email.com',
+      password: '1234567@'
+    });
+
+    password.trigger('keydown.enter');
+
+    await wrapper.vm.$nextTick();
+
+    expect(handleEnter).toHaveBeenCalled();
+    // expect(handleLogin).toHaveBeenCalled();
+  });
+
   it('renders correct error for login', async () => {
     const mocks = {
       $store: {

@@ -5,6 +5,7 @@
         <v-row>
           <v-col cols="12" sm="3" md="2" lg="2" xl="1">
             <v-text-field
+              id="gallon"
               type="number"
               label="Tank Volume"
               class="pt-0"
@@ -17,6 +18,7 @@
           </v-col>
           <v-col cols="12" sm="3" md="2" lg="2" xl="1">
             <v-text-field
+              id="litre"
               type="number"
               label="Tank Volume"
               class="pt-0"
@@ -41,6 +43,7 @@
               <v-row>
                 <v-col cols="12" sm="3" md="2" lg="2" xl="1">
                   <v-text-field
+                    id="currentCalcium"
                     type="number"
                     label="Current"
                     class="pt-0"
@@ -52,6 +55,7 @@
                 </v-col>
                 <v-col cols="12" sm="3" md="2" lg="2" xl="1">
                   <v-text-field
+                    id="expectedCalcium"
                     type="number"
                     label="Expected"
                     class="pt-0"
@@ -74,6 +78,7 @@
                 </v-col>
                 <v-col cols="12" sm="3" md="2" lg="2" xl="1">
                   <v-text-field
+                    id="requiredCalcium"
                     type="number"
                     label="Required"
                     class="pt-0"
@@ -97,6 +102,7 @@
               <v-row>
                 <v-col cols="12" sm="3" md="2" lg="2" xl="1">
                   <v-text-field
+                    id="currentAlkalinity"
                     type="number"
                     label="Current"
                     class="pt-0"
@@ -109,6 +115,7 @@
                 </v-col>
                 <v-col cols="12" sm="3" md="2" lg="2" xl="1">
                   <v-text-field
+                    id="expectedAlkalinity"
                     type="number"
                     label="Expected"
                     class="pt-0"
@@ -132,6 +139,7 @@
                 </v-col>
                 <v-col cols="12" sm="3" md="2" lg="2" xl="1">
                   <v-text-field
+                    id="requiredAlkalinity"
                     type="number"
                     label="Required"
                     class="pt-0"
@@ -155,6 +163,7 @@
               <v-row>
                 <v-col cols="12" sm="3" md="2" lg="2" xl="1">
                   <v-text-field
+                    id="currentMagnesium"
                     type="number"
                     label="Current"
                     class="pt-0"
@@ -166,6 +175,7 @@
                 </v-col>
                 <v-col cols="12" sm="3" md="2" lg="2" xl="1">
                   <v-text-field
+                    id="expectedMagnesium"
                     type="number"
                     label="Expected"
                     class="pt-0"
@@ -188,6 +198,7 @@
                 </v-col>
                 <v-col cols="12" sm="3" md="2" lg="2" xl="1">
                   <v-text-field
+                    id="requiredMagnesium"
                     type="number"
                     label="Required"
                     class="pt-0"
@@ -206,7 +217,7 @@
     <v-card class="pa-4 flex-grow-0 mt-3">
       <v-row>
         <v-col class="py-0" cols="12" md="12" lg="12">
-          <v-btn color="teal darken-1" @click="calculateDosage" small outlined>
+          <v-btn id="calculateDosage" color="teal darken-1" @click="calculateDosage" small outlined>
             <span>Calculate</span>
           </v-btn>
         </v-col>
@@ -359,6 +370,8 @@ export default {
         } else {
           self[key].error = '';
         }
+
+        self.clearTimer();
       }, 200);
     },
     handleVolumeChange(bGallon) {
@@ -388,8 +401,7 @@ export default {
           }
         }
 
-        clearInterval(self.timer);
-        self.timer = null;
+        self.clearTimer();
       }, 300);
     }
   }

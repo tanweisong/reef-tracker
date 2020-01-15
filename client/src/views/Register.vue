@@ -14,7 +14,7 @@
                 :error-messages="error.email"
                 :rules="emailRules"
                 @input="handleEmailInput"
-                v-on:keyup.enter="handleEnter"
+                v-on:keydown.enter="handleEnter"
                 autofocus
                 dense
               ></v-text-field>
@@ -31,7 +31,7 @@
                 :rules="passwordRules"
                 :error-messages="error.password"
                 @input="() => handlePasswordInput()"
-                v-on:keyup.enter="handleEnter"
+                v-on:keydown.enter="handleEnter"
                 dense
               ></v-text-field>
             </v-col>
@@ -47,7 +47,7 @@
                 :rules="confirmPasswordRules"
                 :error-messages="error.confirmPassword"
                 @input="() => handlePasswordInput(true)"
-                v-on:keyup.enter="handleEnter"
+                v-on:keydown.enter="handleEnter"
                 dense
               ></v-text-field>
             </v-col>

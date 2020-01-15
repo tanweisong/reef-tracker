@@ -25,6 +25,44 @@ describe('Register.vue', () => {
     expect(wrapper.find('#confirmPassword').isVisible()).toBeTruthy();
   });
 
+  it('on keydown enter triggers handleEnter', async () => {
+    const handleEnter = jest.fn();
+    const wrapper = mount(Register, {
+      localVue,
+      vuetify,
+      methods: {
+        handleEnter
+      }
+    });
+
+    wrapper.find('#email').trigger('keydown.esc');
+
+    expect(handleEnter).toHaveBeenCalledTimes(0);
+
+    wrapper.find('#email').trigger('keydown.enter');
+
+    expect(handleEnter).toHaveBeenCalled();
+  });
+
+  it('on keydown enter triggers handleRegister', async () => {
+    const handleRegister = jest.fn();
+    const wrapper = mount(Register, {
+      localVue,
+      vuetify,
+      methods: {
+        handleRegister
+      }
+    });
+
+    wrapper.find('#email').trigger('keydown.esc');
+
+    expect(handleRegister).toHaveBeenCalledTimes(0);
+
+    wrapper.find('#email').trigger('keydown.enter');
+
+    expect(handleRegister).toHaveBeenCalled();
+  });
+
   it('renders 3 errors text when register is trigger on empty form', async () => {
     const wrapper = mount(Register, {
       localVue,
@@ -39,15 +77,25 @@ describe('Register.vue', () => {
   });
 
   it('renders correct error for email', async () => {
+    const clearTimer = jest.fn();
     const wrapper = mount(Register, {
       localVue,
-      vuetify
+      vuetify,
+      methods: {
+        clearTimer
+      }
     });
 
     const email = wrapper.find('#email');
     email.setValue('1234');
 
-    jest.runAllTimers();
+    expect(clearTimer).toHaveBeenCalledTimes(0);
+
+    email.setValue('12345');
+
+    expect(clearTimer).toHaveBeenCalled();
+
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
@@ -58,7 +106,7 @@ describe('Register.vue', () => {
 
     email.setValue('invalid@email.com');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
@@ -69,7 +117,7 @@ describe('Register.vue', () => {
 
     email.setValue('valid@email.com');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
@@ -88,7 +136,7 @@ describe('Register.vue', () => {
 
     wrapper.find('#password').setValue('1234567@');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
@@ -96,7 +144,7 @@ describe('Register.vue', () => {
 
     wrapper.find('#confirmPassword').setValue('1234567@');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
@@ -112,7 +160,7 @@ describe('Register.vue', () => {
     const password = wrapper.find('#password');
     password.setValue('1234');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
@@ -123,7 +171,7 @@ describe('Register.vue', () => {
 
     password.setValue('12345678');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
@@ -134,14 +182,14 @@ describe('Register.vue', () => {
 
     password.setValue('1234567@');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
     const confirmPassword = wrapper.find('#confirmPassword');
     confirmPassword.setValue('1234');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
@@ -161,7 +209,7 @@ describe('Register.vue', () => {
 
     confirmPassword.setValue('1234567@');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
@@ -198,19 +246,19 @@ describe('Register.vue', () => {
     const email = wrapper.find('#email');
     email.setValue('test@email.com');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
     wrapper.find('#password').setValue('12345678@');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
     wrapper.find('#confirmPassword').setValue('12345678@');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
@@ -223,13 +271,13 @@ describe('Register.vue', () => {
       'Error creating account'
     );
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 
     email.setValue('valid@email.com');
 
-    jest.runAllTimers();
+    jest.runOnlyPendingTimers();
 
     await wrapper.vm.$nextTick();
 

@@ -9,7 +9,7 @@
                 id="username"
                 label="Username"
                 v-model="username"
-                v-on:keyup.enter="handleEnter"
+                @keydown.enter="handleEnter"
                 autocomplete="new-password"
                 autofocus
                 dense
@@ -24,7 +24,7 @@
                 type="password"
                 label="Password"
                 v-model="password"
-                v-on:keyup.enter="handleEnter"
+                @keydown.enter="handleEnter"
                 autocomplete="new-password"
                 dense
                 hide-details
