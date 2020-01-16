@@ -4,11 +4,10 @@ name: default
 
 steps:
   - name: build
-    build:
-      image: vue/reef-tracker
-      context: .
-  - name: publish
-    image: vue/reef-tracker
+    image: node
+    commands:
+      - npm install
+      - npm run test
 
 trigger:
   branch: master
