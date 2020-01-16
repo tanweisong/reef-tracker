@@ -37,7 +37,7 @@ describe('Register.vue', () => {
 
     wrapper.find('#email').trigger('keydown.esc');
 
-    expect(handleEnter).toHaveBeenCalledTimes(0);
+    expect(handleEnter).not.toHaveBeenCalled();
 
     wrapper.find('#email').trigger('keydown.enter');
 
@@ -56,7 +56,7 @@ describe('Register.vue', () => {
 
     wrapper.find('#email').trigger('keydown.esc');
 
-    expect(handleRegister).toHaveBeenCalledTimes(0);
+    expect(handleRegister).not.toHaveBeenCalled();
 
     wrapper.find('#email').trigger('keydown.enter');
 
@@ -89,7 +89,7 @@ describe('Register.vue', () => {
     const email = wrapper.find('#email');
     email.setValue('1234');
 
-    expect(clearTimer).toHaveBeenCalledTimes(0);
+    expect(clearTimer).not.toHaveBeenCalled();
 
     email.setValue('12345');
 
@@ -140,7 +140,7 @@ describe('Register.vue', () => {
 
     await wrapper.vm.$nextTick();
 
-    expect(handlePasswordInput).toHaveBeenCalledTimes(1);
+    expect(handlePasswordInput).toHaveBeenCalled();
 
     wrapper.find('#confirmPassword').setValue('1234567@');
 
@@ -148,7 +148,7 @@ describe('Register.vue', () => {
 
     await wrapper.vm.$nextTick();
 
-    expect(handlePasswordInput).toHaveBeenCalledTimes(2);
+    expect(handlePasswordInput).toHaveBeenCalled();
   });
 
   it('renders correct errors for both passwords', async () => {

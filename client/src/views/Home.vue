@@ -260,7 +260,7 @@ export default {
         path: '/login'
       });
 
-    self.getTrackings();
+    // self.getTrackings();
   },
   computed: {
     chartYear() {

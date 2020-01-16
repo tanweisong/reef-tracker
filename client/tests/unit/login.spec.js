@@ -60,8 +60,52 @@ describe('Login.vue', () => {
     });
   });
 
-  it('both username and password is filled up and pressing enter key on either field triggers handleEnter', async () => {
+  it('pressing enter on either username or password triggers handleEnter', async () => {
     const handleEnter = jest.fn();
+    const mocks = {
+      $store: {
+        dispatch: jest.fn(),
+        actions: {
+          setLogin: jest.fn(),
+          setShowLoader: jest.fn()
+        },
+        getters: {
+          getShowLoader: jest.fn()
+        }
+      },
+      $router: {
+        push: jest.fn()
+      }
+    };
+
+    const wrapper = mount(Login, {
+      localVue,
+      vuetify,
+
+      methods: {
+        handleEnter
+      },
+      mocks
+    });
+
+    wrapper.setData({
+      username: '',
+      password: ''
+    });
+
+    const username = wrapper.find('#username');
+    const password = wrapper.find('#password');
+
+    username.trigger('keydown.enter');
+
+    expect(handleEnter).toHaveBeenCalled();
+
+    password.trigger('keydown.enter');
+
+    expect(handleEnter).toHaveBeenCalled();
+  });
+
+  it('both username and password is filled up, press enter triggers handleLogin', async () => {
     const handleLogin = jest.fn();
     const mocks = {
       $store: {
@@ -84,7 +128,6 @@ describe('Login.vue', () => {
       vuetify,
 
       methods: {
-        handleEnter,
         handleLogin
       },
       mocks
@@ -100,25 +143,24 @@ describe('Login.vue', () => {
 
     username.trigger('keydown.enter');
 
-    expect(handleEnter).toHaveBeenCalled();
-    expect(handleLogin).toHaveBeenCalledTimes(0);
+    expect(handleLogin).not.toHaveBeenCalled();
 
     password.trigger('keydown.enter');
 
-    expect(handleEnter).toHaveBeenCalled();
-    expect(handleLogin).toHaveBeenCalledTimes(0);
+    expect(handleLogin).not.toHaveBeenCalled();
 
     wrapper.setData({
       username: 'valid@email.com',
       password: '1234567@'
     });
 
+    username.trigger('keydown.enter');
+
+    expect(handleLogin).toHaveBeenCalled();
+
     password.trigger('keydown.enter');
 
-    await wrapper.vm.$nextTick();
-
-    expect(handleEnter).toHaveBeenCalled();
-    // expect(handleLogin).toHaveBeenCalled();
+    expect(handleLogin).toHaveBeenCalled();
   });
 
   it('renders correct error for login', async () => {

@@ -14,24 +14,34 @@ describe('Home.vue', () => {
     vuetify = new Vuetify();
   });
 
-  it('gets tracking when mounted', async () => {
-    // const mocks = {
-    //   $store: {
-    //     getters: {
-    //       getLogin: jest.fn()
-    //     }
-    //   }
-    // };
-    // const getTrackings = jest.fn();
-    // const wrapper = mount(Home, {
-    //   localVue,
-    //   vuetify,
-    //   mocks,
-    //   methods: {
-    //     getTrackings
-    //   }
-    // });
-    // expect(getTrackings).toHaveBeenCalled();
+  it('gets tracking is called after mounting', async () => {
+    const getTrackings = jest.fn();
+    const mocks = {
+      $store: {
+        getters: {
+          getLogin: jest.fn()
+        },
+        dispatch: jest.fn()
+      }
+    };
+    const wrapper = mount(Home, {
+      localVue,
+      vuetify,
+      mocks,
+      methods: {
+        getTrackings
+      },
+      data() {
+        return {
+          labels: [1, 2, 3, 4, 5],
+          calciumData: [0, 0, 0, 0, 0],
+          alkalinityData: [0, 0, 0, 0, 0],
+          magnesiumData: [0, 0, 0, 0, 0]
+        };
+      }
+    });
+
+    expect(getTrackings).toHaveBeenCalled();
   });
 
   // it('renders error correctly when clicking update', async () => {

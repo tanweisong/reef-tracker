@@ -1,0 +1,13 @@
+pipeline:
+  - name: build
+    build:
+      image: vue/reef-tracker
+      context: .
+  - name: publish
+    image: vue/reef-tracker
+    when:
+      branch:
+        - master
+      event:
+        - push
+        - pull_request

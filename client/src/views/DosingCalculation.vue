@@ -290,16 +290,26 @@ export default {
       const current = _.get(obj, 'current');
       const expected = _.get(obj, 'expected');
       const litre = self.litre;
-      const brand = _.get(obj, 'brand');
+      const brandId = _.get(obj, 'brand');
 
       if (
         !_.isNullOrEmpty(current) &&
         !_.isNullOrEmpty(expected) &&
         !_.isNullOrEmpty(litre) &&
-        !_.isNullOrEmpty(brand)
+        !_.isNullOrEmpty(brandId)
       ) {
         if (current > 0 && expected > 0 && litre > 0) {
-          const setting = self.settings[key][brand - 1];
+          const settings = self.settings[key];
+          let setting = null;
+
+          for (let index = 0; index < settings.length; index++) {
+            const _id = _.get(settings[index], '_id');
+
+            if (_id === brandId) {
+              setting = settings[index];
+              break;
+            }
+          }
 
           if (!_.isNil(setting)) {
             const required = expected - current;
@@ -318,13 +328,12 @@ export default {
 
             if (uom === 'g') {
               per = per * self.gallonToLitre;
-            } else {
             }
 
             let reqDosage = (required / increase) * dosage;
             reqDosage = (litre / per) * reqDosage;
 
-            self[key].required = reqDosage;
+            self[key].required = self.roundToDecimalPlaces(reqDosage, 2);
             self[key].requiredSuffix = _.get(setting, 'dosageUOM');
           } else {
             self[key].required = 0;
