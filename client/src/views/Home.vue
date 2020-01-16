@@ -281,7 +281,7 @@ export default {
         labels: self.labels,
         datasets: [
           {
-            label: 'Calcium Consumption',
+            label: 'Calcium Consumptions',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
